@@ -1,4 +1,4 @@
-configuration vWebServer {
+configuration vWebServerHttps {
     param (
         ## Personal information exchange (Pfx) ertificate file path
         [Parameter(Mandatory)]
