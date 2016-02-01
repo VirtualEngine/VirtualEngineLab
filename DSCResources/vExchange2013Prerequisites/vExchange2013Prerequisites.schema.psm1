@@ -1,7 +1,8 @@
-configuration vExchangePrerequisites {
+configuration vExchange2013Prerequisites {
     param (
         ## Path to Unified Communications Managed API 4 exe
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()] [System.String] $UCMAPath,
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $UCMAPath
     )
 
     Import-DscResource -Module xPSDesiredStateConfiguration;
@@ -40,8 +41,7 @@ configuration vExchangePrerequisites {
         'Web-Windows-Auth',
         'Web-WMI',
         'Windows-Identity-Foundation',
-        'RSAT-AD-PowerShell',
-        'RSAT-ADDS-Tools')) {
+        'RSAT-AD-PowerShell')) {
 
         WindowsFeature $feature {
             Name = $feature;
@@ -56,4 +56,4 @@ configuration vExchangePrerequisites {
         Arguments = '-q';
     }
 
-}
+} #end configuration vExchange2013Prerequisites

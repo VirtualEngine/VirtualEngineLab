@@ -5,23 +5,40 @@ configuration vSQLExpress {
     #>
     param (
         ## Path to the SQL Express installation SETUP.EXE on the node.
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()] [System.String] $Path,
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $Path,
+        
         ## Version of SQL we're installing (needed to determine the ProductId).
-        [Parameter()] [ValidateSet('2012','2014')] [System.String] $Version = '2014',
+        [Parameter()] [ValidateSet('2012','2014')]
+        [System.String] $Version = '2014',
+        
         ## SQL Express server instance name.
-        [Parameter()] [ValidateNotNullOrEmpty()] [System.String] $Instance = 'MSSQLServer',
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $Instance = 'MSSQLServer',
+        
         ## SQL Express feature(s) to install.
-        [Parameter()] [ValidateSet('SQLENGINE','SSMS')] [System.String[]] $Features = @('SQLENGINE','SSMS'),
+        [Parameter()] [ValidateSet('SQLENGINE','SSMS')]
+        [System.String[]] $Features = @('SQLENGINE','SSMS'),
+        
         ## SQL Express SA account password. If not specified, SQL authentication is not enabled.
-        [Parameter()] [AllowNull()] [PSCredential] $SAPassword,
+        [Parameter()] [AllowNull()]
+        [PSCredential] $SAPassword,
+        
         ## Enable SQL Express TCP/IP connectivity. Defaults to True.
-        [Parameter()] [System.Boolean] $TcpEnabled = $true,
+        [Parameter()] [System.Boolean]
+        $TcpEnabled = $true,
+        
         ## Enable SQL Express Named Pipes connectivity. Defaults to True.
-        [Parameter()] [System.Boolean] $NpeEnabled = $true,
+        [Parameter()] [System.Boolean]
+        $NpeEnabled = $true,
+        
         ## Whether to ensure that SQL Express is installed or removed.
-        [Parameter()] [ValidateSet('Present','Absent')] $Ensure = 'Present',
+        [Parameter()] [ValidateSet('Present','Absent')]
+        $Ensure = 'Present',
+        
         ## Credential to access Setup.exe
-        [Parameter()] [PSCredential] $Credential
+        [Parameter()]
+        [System.Management.Automation.PSCredential] $Credential
     )
 
     Import-DscResource -ModuleName xNetworking;

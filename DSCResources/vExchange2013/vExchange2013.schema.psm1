@@ -1,24 +1,31 @@
 configuration vExchange2013 {
     param (
         ## AD Schema Admin/Enterprise Admin credential
-        [Parameter(Mandatory)] [PSCredential] $Credential,
+        [Parameter(Mandatory)]
+        [System.Management.Automation.PSCredential] $Credential,
+        
         ## Path to Exchange 2013 setup.exe
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()] [System.String] $Path,
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $Path,
+        
         ## Path to Unified Communications Managed API 4 exe
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()] [System.String] $UCMAPath,
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $UCMAPath,
+        
         ## Exchange organization name
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()] [System.String] $OrganizationName
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $OrganizationName
     )
 
     Import-DscResource -Module xPSDesiredStateConfiguration, xPendingReboot;
-    ## Avoid recursive loading of the VirtualEngineBaseLab composite module
-    Import-DscResource -Name vExchangePrerequisites, vExchangeADPrep;
+    ## Avoid recursive loading of the VirtualEngineLab composite module
+    Import-DscResource -Name vExchange2013Prerequisites, vExchange2013ADPrep;
 
-    vExchangePrerequisites ExchangePrerequisites {
+    vExchange2013Prerequisites ExchangePrerequisites {
         UCMAPath = $UCMAPath;
     }
 
-    vExchangeADPrep ExchangeADPrep {
+    vExchange2013ADPrep ExchangeADPrep {
         Path = $Path;
         OrganizationName = $OrganizationName;
         Credential = $Credential;
@@ -26,7 +33,7 @@ configuration vExchange2013 {
 
     xPendingReboot PendingRebootPreInstall {
         Name = 'PreExchangeInstall';
-        DependsOn = '[vExchangePrerequisites]ExchangePrerequisites','[vExchangeADPrep]ExchangeADPrep';
+        DependsOn = '[vExchange2013Prerequisites]ExchangePrerequisites','[vExchange2013ADPrep]ExchangeADPrep';
     }
 
     xPackage ExchangeInstall {
@@ -35,7 +42,7 @@ configuration vExchange2013 {
         Path = $Path;
         Arguments = '/mode:Install /role:Mailbox,ClientAccess /Iacceptexchangeserverlicenseterms';
         RunAsCredential = $Credential;
-        DependsOn = '[vExchangePrerequisites]ExchangePrerequisites','[vExchangeADPrep]ExchangeADPrep','[xPendingReboot]PendingRebootPreInstall';
+        DependsOn = '[vExchange2013Prerequisites]ExchangePrerequisites','[vExchange2013ADPrep]ExchangeADPrep','[xPendingReboot]PendingRebootPreInstall';
     }
         
     xPendingReboot PendingRebootPostInstall {
@@ -43,4 +50,4 @@ configuration vExchange2013 {
         DependsOn = '[xPackage]ExchangeInstall'
     }
 
-}
+} #end configuration vExchange2013

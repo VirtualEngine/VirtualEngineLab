@@ -1,10 +1,19 @@
 configuration vRemoteDesktopAdmin {
     param (
-        [Parameter()] [ValidateSet('Present','Absent')] [System.String] $Ensure = 'Present',
-        [Parameter()] [ValidateSet('Secure','NonSecure')] [System.String] $UserAuthentication = 'Secure',
-        [Parameter()] [System.Boolean] $EnableFirewallException = $true,
-        [Parameter()] [AllowNull()] [System.String[]] $MembersToInclude = $null,
-        [Parameter()] [AllowNull()] [PSCredential] $Credential = $null
+        [Parameter()] [ValidateSet('Present','Absent')]
+        [System.String] $Ensure = 'Present',
+        
+        [Parameter()] [ValidateSet('Secure','NonSecure')]
+        [System.String] $UserAuthentication = 'Secure',
+        
+        [Parameter()]
+        [System.Boolean] $EnableFirewallException = $true,
+        
+        [Parameter()] [AllowNull()]
+        [System.String[]] $MembersToInclude = $null,
+        
+        [Parameter()] [AllowNull()]
+        [System.Management.Automation.PSCredential] $Credential = $null
     )
 
     Import-DscResource -ModuleName xRemoteDesktopAdmin;

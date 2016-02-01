@@ -1,14 +1,31 @@
 configuration vDomainMember {
     param (
-        [Parameter(Mandatory)] [System.String] $ComputerName,
-        [Parameter(Mandatory)] [AllowNull()] [System.String] $DomainName,
-        [Parameter(Mandatory)] [PSCredential] $Credential,
-        [Parameter()] [ValidateNotNullOrEmpty()] [System.String] $InterfaceAlias = 'Ethernet',
-        [Parameter(ParameterSetName = 'Static')] [ValidateNotNullOrEmpty()] [System.String] $IPAddress,
-        [Parameter(ParameterSetName = 'Static')] [ValidateNotNull()] [System.Int32] $SubnetMask = 24,
-        [Parameter()] [ValidateNotNullOrEmpty()] [System.String] $DefaultGateway,
-        [Parameter()] [ValidateSet('IPv4','IPv6')] [System.String] $AddressFamily = 'IPv4',
-        [Parameter()] [ValidateNotNullOrEmpty()] [System.String] $DnsServer
+        [Parameter(Mandatory)]
+        [System.String] $ComputerName,
+        
+        [Parameter(Mandatory)] [AllowNull()]
+        [System.String] $DomainName,
+        
+        [Parameter(Mandatory)]
+        [System.Management.Automation.PSCredential] $Credential,
+        
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $InterfaceAlias = 'Ethernet',
+        
+        [Parameter(ParameterSetName = 'Static')] [ValidateNotNullOrEmpty()]
+        [System.String] $IPAddress,
+        
+        [Parameter(ParameterSetName = 'Static')] [ValidateNotNull()]
+        [System.Int32] $SubnetMask = 24,
+        
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $DefaultGateway,
+        
+        [Parameter()] [ValidateSet('IPv4','IPv6')]
+        [System.String] $AddressFamily = 'IPv4',
+        
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $DnsServer
     )
 
     Import-DscResource -Module xComputerManagement, xNetworking;

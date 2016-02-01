@@ -7,7 +7,8 @@ configuration vADDomainController {
         [Parameter()] [ValidateNotNull()]
         [PSCredential] $Credential = (Get-Credential -Username 'Administrator' -Message "Enter '$DomainName\Administrator' password."),
 
-        [Parameter()] [System.Boolean] $IncludeManagementTools = $true
+        [Parameter()]
+        [System.Boolean] $IncludeManagementTools = $true
     )
  
     # Import the module that defines custom resources

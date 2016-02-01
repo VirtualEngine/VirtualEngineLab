@@ -3,8 +3,11 @@ configuration vICMP {
     Requires xNetworking/dev (v2.5.0.0 or later):   https://github.com/PowerShell/xNetworking/dev (due to issue #34)
 #>
     param (
-        [Parameter()] [System.Boolean] $IPv4 = $true,
-        [Parameter()] [System.Boolean] $IPv6 = $true
+        [Parameter()]
+        [System.Boolean] $IPv4 = $true,
+        
+        [Parameter()]
+        [System.Boolean] $IPv6 = $true
     )
  
     Import-DscResource -Module xNetworking;

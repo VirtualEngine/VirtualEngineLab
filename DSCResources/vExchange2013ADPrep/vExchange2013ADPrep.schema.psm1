@@ -1,11 +1,16 @@
-configuration vExchangeADPrep {
+configuration vExchange2013ADPrep {
     param (
         ## AD Schema Admin/Enterprise Admin credential
-        [Parameter(Mandatory)] [PSCredential] $Credential,
+        [Parameter(Mandatory)]
+        [System.Management.Automation.PSCredential] $Credential,
+        
         ## Path to Exchange 2013 setup.exe
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()] [System.String] $Path,
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $Path,
+        
         ## Exchange organization name
-        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()] [System.String] $OrganizationName
+        [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
+        [System.String] $OrganizationName
     )
     
     Import-DscResource -Module xPSDesiredStateConfiguration;
@@ -41,4 +46,4 @@ configuration vExchangeADPrep {
         CreateCheckRegValue = $true; ## NOTE: Requires resource that implements issue #46
     }
     
-}
+} #end configuration vExchange2013ADPrep

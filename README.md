@@ -1,5 +1,5 @@
 The VirtualEngineLab composite DSC resources provide a common set of DSC resources that simplify the
-implementation of DSC configurations.
+implementation of internal lab configurations.
 
 ###Included Resources
 * vADDomain
@@ -23,9 +23,11 @@ implementation of DSC configurations.
 * vRemoteDesktopAdmin
  * Enables RDP connections and permits inbound RDP connections
 * vSQLExpress
- * Installs NetFX 3.5 and SQL Express 2012/2014
+ * Enables NetFX 3.5 and installs SQL Express 2012/2014
 * vWebServer
  * Installs standard IIS web server roles/features
+* vWebServerHttps
+ * Installs standard IIS web server roles/features and imports PFX certificate
 * vWorkgroupMember
  * Configures the TCP/IP stack and computer name
 
@@ -39,3 +41,4 @@ There are __dependencies__ on the following DSC resources:
 * xRemoteDesktopAdmin - https://github.com/Powershell/xRemoteDesktopAdmin
 * xWebAdministration - https://github.com/Powershell/xWebAdministration
 * xPendingReboot - https://github.com/Powershell/xPendingReboot
+* xCertificate - https://github.com/Powershell/xCertificate

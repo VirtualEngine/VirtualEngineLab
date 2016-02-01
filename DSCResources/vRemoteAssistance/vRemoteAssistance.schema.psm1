@@ -1,7 +1,10 @@
 configuration vRemoteAssistance {
     param (
-        [Parameter()] [ValidateSet('Present','Absent')] [System.String] $Ensure = 'Present',
-        [Parameter()] [System.Boolean] $EnableFirewallException = $true
+        [Parameter()] [ValidateSet('Present','Absent')]
+        [System.String] $Ensure = 'Present',
+        
+        [Parameter()]
+        [System.Boolean] $EnableFirewallException = $true
     )
 
     Import-DscResource -ModuleName xNetworking;
