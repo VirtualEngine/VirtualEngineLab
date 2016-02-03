@@ -6,6 +6,10 @@ implementation of internal lab configurations.
  * Deploys a new Active Directory forest and domain
 * vADDomainController
  * Deploys an additional Active Directory domain controller to a domain
+* vAdobeReader
+ * Installs Adobe Reader XI/DC and disables updates and cloud service integration
+* vAppV5
+ * Installs App-V 5.0/5.1 client/RDS client
 * vDomainMember
  * Configures the TCP/IP stack, computer name and joins a computer to an Active Directory domain
 * vExchange2013
@@ -16,8 +20,14 @@ implementation of internal lab configurations.
  * Installs required Windows features and installs Unified Communications Managed API 4.0
 * vFile
  * Downloads a file from a UNC path or from the internet
+* vFirefox
+ * Installs Mozilla Firefox and disables updates 
 * vICMP
  * Permits inbound ICMP traffic through the Windows firewall
+* vNotepadPlusPlus
+ * Installs Notepad++
+* vOfficeProPlus
+ * Installs and configures Office 2010, 2013 or 2016 Professional Plus and configures KMS server
 * vRemoteAssistance
  * Installs the Remote Assistance feature and permits inbound RDP shadow requests
 * vRemoteDesktopAdmin
