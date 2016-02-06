@@ -33,7 +33,8 @@ configuration vAdobeReader {
         InstalledCheckRegValueData = 'C:\Program Files (x86)\Adobe\Reader {0}\' -f $versionString;
     }
     
-    foreach ($valueName in 'bUpdater','bUsageMeasurement') {
+    ## FeatureLockdown : DWORD 0
+    foreach ($valueName in 'bUpdater','bUsageMeasurement','bPurchaseAcro') {
         Registry $valueName {
             Key = 'HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\{0}\FeatureLockdown' -f $versionString;
             ValueName = $valueName;
@@ -42,19 +43,30 @@ configuration vAdobeReader {
             Ensure = 'Present';
             DependsOn = '[xPackage]AdoberReader';
         }
-    } #end foreach \DC\FeatureLockdown
+    } #end foreach \xx\FeatureLockdown
     
-    if ($Version -eq 'DC') {
-        foreach ($valueName in 'bToggleAdobeDocumentServices','bTogglePrefsSync') {
-            Registry $valueName {
-                Key = 'HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\{0}\FeatureLockdown\cServices' -f $versionString;
-                ValueName = $valueName;
-                ValueData = '0';
-                ValueType = 'Dword';
-                Ensure = 'Present';
-                DependsOn = '[xPackage]AdoberReader';
-            }
-        } #end foreach \DC\FeatureLockdown\cServices
-    } #end if DC
+    ## FeatureLockdown : DWORD 1
+    foreach ($valueName in 'bCommercialPDF') {
+        Registry $valueName {
+            Key = 'HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\{0}\FeatureLockdown' -f $versionString;
+            ValueName = $valueName;
+            ValueData = '1';
+            ValueType = 'Dword';
+            Ensure = 'Present';
+            DependsOn = '[xPackage]AdoberReader';
+        }
+    } #end foreach \xx\FeatureLockdown
+    
+    ## cServices : DWORD 0
+    foreach ($valueName in 'bUpdater','bToggleAdobeDocumentServices','bTogglePrefsSync','bEnableSignPane') {
+        Registry $valueName {
+            Key = 'HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\{0}\FeatureLockdown\cServices' -f $versionString;
+            ValueName = $valueName;
+            ValueData = '0';
+            ValueType = 'Dword';
+            Ensure = 'Present';
+            DependsOn = '[xPackage]AdoberReader';
+        }
+    } #end foreach \xx\FeatureLockdown\cServices
 
 } #end configuration vAdobeReader

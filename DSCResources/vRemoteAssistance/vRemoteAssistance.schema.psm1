@@ -24,4 +24,4 @@ configuration vRemoteAssistance {
         }
     }
 
-}
+} #end configuration vRemoteAssistance
