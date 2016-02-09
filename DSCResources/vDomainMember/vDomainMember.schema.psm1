@@ -25,7 +25,10 @@ configuration vDomainMember {
         [System.String] $AddressFamily = 'IPv4',
         
         [Parameter()] [ValidateNotNullOrEmpty()]
-        [System.String] $DnsServer
+        [System.String] $DnsServer,
+        
+        [Parameter()] [AllowNull()]
+        [System.String] $TargetOU
     )
 
     Import-DscResource -Module xComputerManagement, xNetworking;
@@ -60,18 +63,40 @@ configuration vDomainMember {
     }
     
     if ($resourceDependsOn.Count -ge 1) {
-        xComputer 'ComputerName' {
-            Name = $ComputerName;
-            DomainName = $DomainName;
-            Credential = $Credential;
-            DependsOn = $resourceDependsOn;
+        if ([System.String]::IsNullOrEmpty($TargetOU)) {
+            xComputer 'ComputerName' {
+                Name = $ComputerName;
+                DomainName = $DomainName;
+                Credential = $Credential;
+                DependsOn = $resourceDependsOn;
+            }
+        }
+        else {
+            xComputer 'ComputerName' {
+                Name = $ComputerName;
+                DomainName = $DomainName;
+                JoinOU = $TargetOU;
+                Credential = $Credential;
+                DependsOn = $resourceDependsOn;
+            }
         }
     }
     else {
-        xComputer 'ComputerName' {
-            Name = $ComputerName;
-            DomainName = $DomainName;
-            Credential = $Credential;
+        if ([System.String]::IsNullOrEmpty($TargetOU)) {
+            xComputer 'ComputerName' {
+                Name = $ComputerName;
+                DomainName = $DomainName;
+                Credential = $Credential;
+            }
+        }
+        else {
+            xComputer 'ComputerName' {
+                Name = $ComputerName;
+                DomainName = $DomainName;
+                JoinOU = $TargetOU;
+                Credential = $Credential;
+            }
         }
     }
-}
+
+} #end configurationvDomainMember
