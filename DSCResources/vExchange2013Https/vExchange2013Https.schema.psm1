@@ -1,4 +1,4 @@
-configuration vExchange2013 {
+configuration vExchange2013Https {
     param (
         ## AD Schema Admin/Enterprise Admin credential
         [Parameter(Mandatory)]
@@ -72,4 +72,4 @@ configuration vExchange2013 {
         DependsOn = '[xPackage]ExchangeInstall';
     }
 
-} #end configuration vExchange2013
+} #end configuration vExchange2013Https

@@ -35,7 +35,7 @@ configuration vAdobeReader {
     
     ## FeatureLockdown : DWORD 0
     foreach ($valueName in 'bUpdater','bUsageMeasurement','bPurchaseAcro') {
-        Registry $valueName {
+        Registry "FeatureLockdown_$valueName" {
             Key = 'HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\{0}\FeatureLockdown' -f $versionString;
             ValueName = $valueName;
             ValueData = '0';
@@ -47,7 +47,7 @@ configuration vAdobeReader {
     
     ## FeatureLockdown : DWORD 1
     foreach ($valueName in 'bCommercialPDF') {
-        Registry $valueName {
+        Registry "FeatureLockdown_$valueName" {
             Key = 'HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\{0}\FeatureLockdown' -f $versionString;
             ValueName = $valueName;
             ValueData = '1';
@@ -59,7 +59,7 @@ configuration vAdobeReader {
     
     ## cServices : DWORD 0
     foreach ($valueName in 'bUpdater','bToggleAdobeDocumentServices','bTogglePrefsSync','bEnableSignPane') {
-        Registry $valueName {
+        Registry "cServices_$valueName" {
             Key = 'HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\{0}\FeatureLockdown\cServices' -f $versionString;
             ValueName = $valueName;
             ValueData = '0';
