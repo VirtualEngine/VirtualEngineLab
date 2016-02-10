@@ -48,15 +48,15 @@ configuration vSQLExpress {
 	    Name = 'Net-Framework-Core';
     }
 
-    if ($TcpEnabled -eq $true) { $tcpEnabledString = '1'; }
-    else { $tcpEnabledString = '0'; }
-    if ($NpeEnabled -eq $true) { $npeEnabledString = '1'; }
-    else { $npeEnabledString = '0'; }
+    $tcpEnabledString = if ($TcpEnabled -eq $true) { '1' } else { '0' };
+    $npeEnabledString = if ($NpeEnabled -eq $true) { '1'} else { '0' };
 
     $packageArguments = New-Object System.Text.StringBuilder;
     [ref] $null = $packageArguments.AppendFormat('/Q /ACTION=INSTALL /INSTANCENAME={0} /TCPENABLED={1} /NPENABLED={2}', $Instance, $tcpEnabledString, $npeEnabledString); 
     [ref] $null = $packageArguments.AppendFormat(' /FEATURES={0} ', [System.String]::Join(',', $Features));
-    if ($SAPassword) { [ref] $null = $packageArguments.AppendFormat(' /SECURITYMODE=SQL /SAPWD={0}', $SAPassword.GetNetworkCredential().Password); }
+    if ($SAPassword) {
+        [ref] $null = $packageArguments.AppendFormat(' /SECURITYMODE=SQL /SAPWD={0}', $SAPassword.GetNetworkCredential().Password);
+    }
     [ref] $null = $packageArguments.Append(' /SQLSYSADMINACCOUNTS="Builtin\Administrators" /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" /IACCEPTSQLSERVERLICENSETERMS');
 
     switch ($Version) {

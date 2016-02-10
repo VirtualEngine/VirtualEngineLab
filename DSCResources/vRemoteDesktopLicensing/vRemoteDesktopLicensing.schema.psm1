@@ -1,7 +1,7 @@
 configuration vRemoteDesktopLicensing {
     param (
         [Parameter()]
-        [System.Boolean] $InstallRDSLicensingUI = $true;
+        [System.Boolean] $InstallRDSLicensingUI = $true
     )
     
     Import-DscResource -ModuleName PSDesiredStateConfiguration;
