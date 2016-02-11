@@ -16,21 +16,21 @@ configuration vAWSTools {
 
     Import-DscResource -Module xPSDesiredStateConfiguration;
    
-    File Sources {
+    File 'Sources' {
         DestinationPath = $SourcePath;
         Type = 'Directory';
         Ensure = 'Present';
     }
 
     ## Download Binaries
-    xRemoteFile AWSToolsAndSDKForNetDownload {
+    xRemoteFile 'AWSToolsAndSDKForNetDownload' {
         #Ensure = 'Present';
         DestinationPath = Join-Path -Path $SourcePath -ChildPath $FileName;
         Uri = $Uri;
     }
 
     ## Install AWS SDK
-    Package AWSPowershellToolsInstall {
+    Package 'AWSPowershellToolsInstall' {
         Ensure = 'Present';
         Name = 'AWS Tools for Windows';
         Path = Join-Path -Path $SourcePath -ChildPath $FileName;

@@ -42,7 +42,7 @@ configuration vWebServerHttps {
         }
     } #end foreach feature
 
-    xPfxImport PfxCertificate {
+    xPfxImport 'PfxCertificate' {
         Thumbprint = $PfxCertificateThumbprint;
         Location = 'LocalMachine';
         Store = 'My';
@@ -50,7 +50,7 @@ configuration vWebServerHttps {
         Credential = $PfxCertificateCredential;
     }
     
-    xWebSite DefaultWebSite {
+    xWebSite 'DefaultWebSite' {
         Name = 'Default Web Site';
         PhysicalPath = 'C:\inetpub\wwwroot';
         BindingInfo = @(
@@ -60,4 +60,4 @@ configuration vWebServerHttps {
         DependsOn = '[WindowsFeature]Web-Server','[xPfxImport]PfxCertificate';
     }
     
-}
+} #end configuration vWebServerHttps

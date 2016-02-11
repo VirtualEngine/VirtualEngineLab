@@ -1,5 +1,4 @@
-﻿
-configuration vADDomain {
+﻿configuration vADDomain {
     param (
         [Parameter()] [ValidateNotNull()]
         [System.String] $DomainName = 'lab.local',
@@ -36,4 +35,5 @@ configuration vADDomain {
         DomainAdministratorCredential = $Credential;
         DependsOn = '[WindowsFeature]ADDomainServices','[WindowsFeature]DNS';
     }
-}
+
+} #end configuration vADDomain

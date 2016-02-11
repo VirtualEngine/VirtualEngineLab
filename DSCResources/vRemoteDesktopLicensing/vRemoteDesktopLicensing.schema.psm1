@@ -6,12 +6,12 @@ configuration vRemoteDesktopLicensing {
     
     Import-DscResource -ModuleName PSDesiredStateConfiguration;
     
-    WindowsFeature RDSLicensing {
+    WindowsFeature 'RDSLicensing' {
         Name = 'RDS-Licensing';
     }
     
     if ($InstallRDSLicensingUI) {
-        WindowsFeature RDSLicensingUI {
+        WindowsFeature 'RDSLicensingUI' {
             Name = 'RDS-Licensing-UI';
         }
     }

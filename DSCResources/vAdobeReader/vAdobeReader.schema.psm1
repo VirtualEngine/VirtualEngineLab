@@ -22,11 +22,11 @@ configuration vAdobeReader {
         }
     }
 
-    xPackage AdoberReader {
+    xPackage 'AdoberReader' {
         Name = $productName;
         ProductId = '';
         Path = $Path;
-        Arguments = '/sAll /msi /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES';
+        Arguments = '/sAll /msi /norestart /quiet ALLUSERS=1 EULA_ACCEPT=YES ENABLE_CACHE_FILES=NO ENABLE_OPTIMIZATION=NO';
         ReturnCode = 0;
         InstalledCheckRegKey = 'Software\Wow6432Node\Adobe\Acrobat Reader\{0}\Installer' -f $versionString;
         InstalledCheckRegValueName = 'Path';

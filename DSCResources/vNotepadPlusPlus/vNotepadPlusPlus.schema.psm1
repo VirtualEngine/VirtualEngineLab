@@ -8,7 +8,7 @@ configuration vNotepadPlusPlus {
     # Import the module that defines custom resources
     Import-DscResource -Module xPSDesiredStateConfiguration;
 
-    xPackage NotepadPlusPlus {
+    xPackage 'NotepadPlusPlus' {
         Name = 'Notepad++';
         ProductId = '';
         Path = $Path;

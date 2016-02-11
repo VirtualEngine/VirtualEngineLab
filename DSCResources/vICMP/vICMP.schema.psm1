@@ -12,7 +12,7 @@ configuration vICMP {
  
     Import-DscResource -Module xNetworking;
 
-    xFirewall 'xFirewall_ICMPv4' {
+    xFirewall 'ICMPv4' {
         Name = 'FPS-ICMP4-ERQ-In';
         DisplayName = 'File and Printer Sharing (Echo Request - ICMPv4-In)';
         Description = 'Echo request messages are sent as ping requests to other nodes.';
@@ -22,7 +22,7 @@ configuration vICMP {
         Enabled = $IPv4.ToString();
     }
 
-    xFirewall 'xFirewall_ICMPv6' {
+    xFirewall 'ICMPv6' {
         Name = 'FPS-ICMP6-ERQ-In';
         DisplayName = 'File and Printer Sharing (Echo Request - ICMPv6-In)';
         Description = 'Echo request messages are sent as ping requests to other nodes.';
@@ -32,4 +32,4 @@ configuration vICMP {
         Enabled = $IPv6.ToString();
     }
 
-}
+} #end configuration vICMP

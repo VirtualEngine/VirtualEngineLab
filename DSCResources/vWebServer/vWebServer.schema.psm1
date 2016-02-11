@@ -28,4 +28,4 @@ configuration vWebServer {
         }
     } #end foreach feature
 
-}
+} #end configuration vWebServer

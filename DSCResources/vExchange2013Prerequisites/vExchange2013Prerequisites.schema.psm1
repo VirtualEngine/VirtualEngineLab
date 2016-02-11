@@ -49,7 +49,7 @@ configuration vExchange2013Prerequisites {
         }
     } #end foreach feature
 
-    xPackage UcmaRuntime {
+    xPackage 'UcmaRuntime' {
         Name = 'Unified Communications Managed API 4.0';
         ProductId = '{41D635FE-4F9D-47F7-8230-9B29D6D42D31}';
         Path = $UCMAPath;

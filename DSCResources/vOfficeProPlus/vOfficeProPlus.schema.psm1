@@ -61,7 +61,7 @@ configuration vOfficeProPlus {
         $configXml = $configXmlNoKms -replace '\{company\}',$Company;
     }
     
-    File OfficeConfigXml {
+    File 'OfficeConfigXml' {
         DestinationPath = $tempConfigPath;
         Contents = $configXml;
         Ensure = 'Present';

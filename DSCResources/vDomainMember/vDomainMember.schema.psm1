@@ -46,7 +46,7 @@ configuration vDomainMember {
     }
 
     if ($DefaultGateway) {
-        xDefaultGatewayAddress Gateway {
+        xDefaultGatewayAddress 'Gateway' {
             Address = $DefaultGateway;
             InterfaceAlias = $InterfaceAlias;
             AddressFamily = $AddressFamily;

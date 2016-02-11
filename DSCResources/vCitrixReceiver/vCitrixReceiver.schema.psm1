@@ -8,7 +8,7 @@ configuration vCitrixReceiver {
     # Import the module that defines custom resources
     Import-DscResource -Module xPSDesiredStateConfiguration;
 
-    xPackage CitrixReceiver {
+    xPackage 'CitrixReceiver' {
         Name = 'Citrix Receiver';
         ProductId = '';
         Path = $Path;

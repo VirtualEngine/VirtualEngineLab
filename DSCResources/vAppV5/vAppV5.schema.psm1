@@ -28,7 +28,7 @@ configuration vAppV5 {
         }
     }
      
-    Package AppV5 {
+    Package 'AppV5' {
         Name = 'Microsoft Application Virtualization (App-V) Client';
         Path = $Path;
         ProductId = $productCode;

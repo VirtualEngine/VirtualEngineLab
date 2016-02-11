@@ -33,22 +33,22 @@ configuration vExchange2013Https {
     ## Avoid recursive loading of the VirtualEngineLab composite module
     Import-DscResource -Name vExchange2013Prerequisites, vExchange2013ADPrep;
 
-    vExchange2013Prerequisites ExchangePrerequisites {
+    vExchange2013Prerequisites 'ExchangePrerequisites' {
         UCMAPath = $UCMAPath;
     }
 
-    vExchange2013ADPrep ExchangeADPrep {
+    vExchange2013ADPrep 'ExchangeADPrep' {
         Path = $Path;
         OrganizationName = $OrganizationName;
         Credential = $Credential;
     }
 
-    xPendingReboot PendingRebootPreInstall {
+    xPendingReboot 'PendingRebootPreInstall' {
         Name = 'PreExchangeInstall';
         DependsOn = '[vExchange2013Prerequisites]ExchangePrerequisites','[vExchange2013ADPrep]ExchangeADPrep';
     }
 
-    xPackage ExchangeInstall {
+    xPackage 'ExchangeInstall' {
         Name = 'Exchange 2013';
         ProductId = '{4934D1EA-BE46-48B1-8847-F1AF20E892C1}';
         Path = $Path;
@@ -57,12 +57,12 @@ configuration vExchange2013Https {
         DependsOn = '[vExchange2013Prerequisites]ExchangePrerequisites','[vExchange2013ADPrep]ExchangeADPrep','[xPendingReboot]PendingRebootPreInstall';
     }
         
-    xPendingReboot PendingRebootPostInstall {
+    xPendingReboot 'PendingRebootPostInstall' {
         Name = 'PostInstall';
         DependsOn = '[xPackage]ExchangeInstall'
     }
     
-    xExchExchangeCertificate ExchangeCertificate {
+    xExchExchangeCertificate 'ExchangeCertificate' {
         Thumbprint = $PfxCertificateThumbprint;
         Credential = $Credential;
         CertCreds = $PfxCertificateCredential;

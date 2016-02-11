@@ -1,4 +1,3 @@
-
 configuration vADDomainController {
     param (
         [Parameter()] [ValidateNotNull()]
@@ -44,4 +43,5 @@ configuration vADDomainController {
         DomainAdministratorCredential = $Credential;
         DependsOn = '[xWaitForADDomain]WaitForADDomain';
     }
-}
+
+} #end configuration vADDomainController

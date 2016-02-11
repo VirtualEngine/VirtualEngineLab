@@ -19,7 +19,7 @@ configuration vExchange2013ADPrep {
     $forestPrepValue = 'ExchangeForestPrep';
     $domainPrepValue = 'ExchangeDomainPrep';
 
-    xPackage ExchangeForestPrep {
+    xPackage 'ExchangeForestPrep' {
         Name = 'Exchange Forest Prep';
         ProductId = '';
         Path = $Path;
@@ -32,7 +32,7 @@ configuration vExchange2013ADPrep {
         CreateCheckRegValue = $true; ## NOTE: Requires resource that implements issue #46
     }
 
-    xPackage ExchangeDomainPrep {
+    xPackage 'ExchangeDomainPrep' {
         Name = 'Exchange Domain Prep';
         ProductId = '';
         Path = $Path;

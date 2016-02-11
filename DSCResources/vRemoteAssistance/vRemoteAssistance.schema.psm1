@@ -9,13 +9,13 @@ configuration vRemoteAssistance {
 
     Import-DscResource -ModuleName xNetworking;
 
-    WindowsFeature RemoteAssistance {
+    WindowsFeature 'RemoteAssistance' {
         Name = 'Remote-Assistance';
         Ensure = 'Present';
     }
 
     if ($EnableFirewallException -eq $true) {
-        xFirewall RemoteDesktopShadowInTCP {
+        xFirewall 'RemoteDesktopShadowInTCP' {
             Name = 'RemoteDesktop-Shadow-In-TCP';
             DisplayName = 'Remote Desktop - Shadow (TCP-In)';
             Action = 'Allow';

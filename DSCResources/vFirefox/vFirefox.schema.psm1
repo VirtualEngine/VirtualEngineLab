@@ -22,14 +22,14 @@ StartMenuShortcuts=true
 MaintenanceService=false
 '@;
     
-    File FirefoxIni {
+    File 'FirefoxIni' {
         DestinationPath = $firefoxIniPath;
         Contents = $firefoxIni;
         Ensure = 'Present';
         Type = 'File';
     }
     
-    xPackage Firefox {
+    xPackage 'Firefox' {
         Name = 'Firefox';
         ProductId = '';
         Path = $Path;
@@ -51,7 +51,7 @@ lockPref("app.update.service.enabled", false);
 // Turn off for XenApp
 defaultPref("layers.acceleration.disabled", true);
 '@
-    File MozillaCfg {
+    File 'MozillaCfg' {
         DestinationPath = '{0}\Mozilla Firefox\Mozilla.cfg' -f ${env:ProgramFiles(x86)};
         Contents = $mozillaCfg;
         Ensure = 'Present';
@@ -64,7 +64,7 @@ pref("general.config.obscure_value", 0); // only needed if you do not want to ob
 pref("general.config.filename", "mozilla.cfg");
 '@
     
-    File LocalSettingsJS {
+    File 'LocalSettingsJS' {
         DestinationPath = '{0}\Mozilla Firefox\browser\defaults\preferences\local-settings.js' -f ${env:ProgramFiles(x86)};
         Contents = $localSettingsJS;
         Ensure = 'Present';
@@ -77,7 +77,7 @@ pref("general.config.filename", "mozilla.cfg");
 [XRE]
 EnableProfileMigrator=false
 '@
-        File OverrideIni {
+        File 'OverrideIni' {
             DestinationPath = '{0}\Mozilla Firefox\browser\override.ini' -f ${env:ProgramFiles(x86)};
             Contents = $overrideIni;
             Ensure = 'Present';

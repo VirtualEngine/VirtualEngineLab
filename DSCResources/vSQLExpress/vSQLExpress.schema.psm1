@@ -65,7 +65,7 @@ configuration vSQLExpress {
     }
 
     if ($Credential) {
-        Package SQLExpressInstall {
+        Package 'SQLExpressInstall' {
             Ensure = $Ensure;
             Name = 'SQL Express';
             Path = $Path;
@@ -76,7 +76,7 @@ configuration vSQLExpress {
         }
     }
     else {
-        Package SQLExpressInstall {
+        Package 'SQLExpressInstall' {
             Ensure = $Ensure;
             Name = 'SQL Express';
             Path = $Path;
@@ -86,7 +86,7 @@ configuration vSQLExpress {
         }
     }
 
-    xFirewall SQLFirewall {
+    xFirewall 'SQLFirewall' {
         Name = 'MSSQL-TCP-1433-In';
         Action = 'Allow';
         Direction = 'Inbound';
@@ -98,4 +98,4 @@ configuration vSQLExpress {
         Description = 'Default MS SQL Server instance';
     }
 
-}
+} #end configuration vSQLExpress

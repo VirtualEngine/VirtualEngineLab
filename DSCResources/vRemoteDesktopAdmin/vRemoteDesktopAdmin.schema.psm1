@@ -20,7 +20,7 @@ configuration vRemoteDesktopAdmin {
     Import-DscResource -ModuleName xNetworking;
 
     if ($MembersToInclude) {
-        Group vRemoteDesktopAdmin_RemoteDesktopUsers {
+        Group 'RemoteDesktopUsers' {
             GroupName = 'Remote Desktop Users';
             Ensure = $Ensure;
             MembersToInclude = $MembersToInclude;
@@ -28,20 +28,20 @@ configuration vRemoteDesktopAdmin {
         }
     }
 
-    xRemoteDesktopAdmin vRemoteDesktopAdmin_RemoteDesktopAdmin {
+    xRemoteDesktopAdmin 'RemoteDesktopAdmin' {
         Ensure = $Ensure;
         UserAuthentication = $UserAuthentication;
     }
 
     if ($EnableFirewallException -eq $true) {
-        xFirewall RemoteDesktopUserModeInTCP {
+        xFirewall 'RemoteDesktopUserModeInTCP' {
             Name = 'RemoteDesktop-UserMode-In-TCP';
             DisplayName = 'Remote Desktop - User Mode (TCP-In)';
             Action = 'Allow';
             Enabled = $true;
         }
 
-        xFirewall RemoteDesktopUserModeInUDP {
+        xFirewall 'RemoteDesktopUserModeInUDP' {
             Name = 'RemoteDesktop-UserMode-In-UDP';
             DisplayName = 'Remote Desktop - User Mode (UDP-In)';
             Action = 'Allow';
@@ -49,4 +49,4 @@ configuration vRemoteDesktopAdmin {
         }
     } #end if Enable Firewall
 
-}
+} #end configuration vRemoteDesktopAdmin
