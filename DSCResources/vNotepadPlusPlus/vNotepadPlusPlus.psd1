@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vNotepadPlusPlus.schema.psm1';
     ModuleVersion = '1.0';
     GUID = 'da2fc69d-f299-479c-bd17-dc127b32b850';

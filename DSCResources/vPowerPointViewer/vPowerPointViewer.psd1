@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vPowerPointViewer.schema.psm1';
     ModuleVersion = '1.0';
     GUID = 'a1ddbbdc-fe79-4e2a-af40-c50ec7dc4d61';

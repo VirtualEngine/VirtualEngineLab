@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vICMP.schema.psm1';
     ModuleVersion = '1.0';
     GUID = '71ca1a68-2163-482c-9e75-776beca5e7a4';

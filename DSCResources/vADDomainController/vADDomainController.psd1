@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vADDomainController.schema.psm1';
     ModuleVersion = '1.0';
     GUID = '78f2eb3e-989f-498b-bc29-2864d38bbdae';

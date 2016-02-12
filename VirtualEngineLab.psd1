@@ -1,9 +1,9 @@
 ﻿@{
-    ModuleVersion = '1.7.0';
+    ModuleVersion = '1.8.0';
     RootModule = 'VirtualEngineLab.psm1';
     GUID = '23d1bba6-93ce-4d19-8fb9-15a1f4339b07';
     Author = 'Iain Brighton';
     CompanyName = 'Virtual Engine';
     Copyright = '(c) 2016 Virtual Engine Limited. All rights reserved.';
-    Description = 'Virtual Engine Lab Desired State Configuration composite resources.';
+    Description = 'Virtual Engine Lab Desired State Configuration resources.';
 }

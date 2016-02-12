@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vRemoteAssistance.schema.psm1';
     ModuleVersion = '1.0';
     GUID = 'e54a8b66-dce4-4dd5-8ccf-3b591cf50e6f';

@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vOfficeProPlus.schema.psm1';
     ModuleVersion = '1.0';
     GUID = '63fffeb5-5d38-41ea-a39d-bcf1304feaa4';

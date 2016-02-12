@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vExchange2013.schema.psm1';
     ModuleVersion = '1.0';
     GUID = '60ed75d9-5579-4f0f-8e0a-a55857a8daa9';

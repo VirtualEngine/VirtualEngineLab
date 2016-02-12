@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vDomainMember.schema.psm1';
     ModuleVersion = '1.0';
     GUID = 'fc64c15c-a2f7-469d-8641-ea4266c0526e';

@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vAWSTools.schema.psm1';
     ModuleVersion = '1.0';
     GUID = 'fa1b50de-f701-463e-b02e-a6362ec0a765';

@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vSQLExpress.schema.psm1';
     ModuleVersion = '1.0';
     GUID = '4add97aa-485c-4700-8318-350f52ca5fe0';

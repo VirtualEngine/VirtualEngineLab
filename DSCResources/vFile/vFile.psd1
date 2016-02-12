@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vFile.schema.psm1';
     ModuleVersion = '1.0';
     GUID = 'cf89596f-b145-4e69-9df3-221fc4d54d99';

@@ -1,4 +1,4 @@
-@{
+﻿@{
     RootModule = 'vWebServerHttps.schema.psm1';
     ModuleVersion = '1.0';
     GUID = 'd434b324-97bd-4a28-827f-1fc8701d29c6';
