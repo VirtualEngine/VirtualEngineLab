@@ -8,6 +8,8 @@ implementation of internal lab configurations.
  * Deploys an additional Active Directory domain controller to a domain
 * vAdobeReader
  * Installs Adobe Reader XI/DC and disables updates and cloud service integration
+* vADUserThumbnailPhoto
+ * Configures Active Directory user thumbnail photos
 * vAppV5
  * Installs App-V 5.0/5.1 client/RDS client
 * vCitrixReceiver

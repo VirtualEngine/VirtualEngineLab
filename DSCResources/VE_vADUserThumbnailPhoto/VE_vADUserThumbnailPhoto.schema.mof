@@ -1,0 +1,12 @@
+[ClassVersion("1.0.0"), FriendlyName("vADUserThumbnailPhoto")] 
+class VE_vADUserThumbnailPhoto : OMI_BaseResource
+{
+    [Key] String DomainName;
+    [Key] String UserName;
+    [Required, Description("Path to a picture file or Base64-encoded thumbnail photo")] String ThumbnailPhoto;
+    [Write, ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] String Ensure;
+    [Write, EmbeddedInstance("MSFT_Credential")] String DomainAdministratorCredential;
+    [Write, Description("Connect to specific Domain Controller")] String DomainController;
+    [Read, Description("DN of the user account")] String DistinguishedName;
+    [Read, Description("MD5 hash of the current thumbnail photo")] String ThumbnailPhotoHash;
+};
