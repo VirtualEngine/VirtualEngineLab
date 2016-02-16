@@ -35,6 +35,7 @@ configuration vDomainMember {
     Import-DscResource -Name vIPAddress, vDNSServerAddress, vDefaultGatewayAddress;
 
     $resourceDependsOn = @();
+    $domainCredential = $Credential;
     
     if ($InterfaceAlias -match 'Local Area Connection') {
         
@@ -66,7 +67,6 @@ configuration vDomainMember {
             $resourceDependsOn += '[vDNSServerAddress]DNS';
         }
         
-        $domainCredential = $Credential;
         ## Win7 requires domain join credential to be NETBIOSDOMAIN\Username
         if (-not $Credential.UserName.Contains('\')) {
             $domainCredentialUsername = '{0}\{1}' -f $DomainName.Split('.')[0], $Credential.Username;
@@ -103,10 +103,7 @@ configuration vDomainMember {
             $resourceDependsOn += '[xDNSServerAddress]DNS';
         }
         
-        $domainCredental = $Credential;
-
     } #end InterfaceAlias like Ethernet 
-
     
     if ($resourceDependsOn.Count -ge 1) {
         if ([System.String]::IsNullOrEmpty($TargetOU)) {
@@ -126,7 +123,7 @@ configuration vDomainMember {
                 DependsOn = $resourceDependsOn;
             }
         }
-    } #end if join OU
+    } #end if dependecnies
     else {
         if ([System.String]::IsNullOrEmpty($TargetOU)) {
             xComputer 'ComputerName' {
@@ -143,6 +140,6 @@ configuration vDomainMember {
                 Credential = $domainCredential;
             }
         }
-    } #end if no join OU
+    } #end if no dependencies
 
 } #end configurationvDomainMember
