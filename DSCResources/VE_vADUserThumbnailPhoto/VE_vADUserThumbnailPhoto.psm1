@@ -185,7 +185,7 @@ function Set-TargetResource
     
     if ($Ensure -eq 'Present')
     {
-        $thumbnailPhotoBytes = Get-ThumbnailBytes -ThumbnailPhoto $ThumbnailPhoto;
+        [System.Byte[]] $thumbnailPhotoBytes = Get-ThumbnailBytes -ThumbnailPhoto $ThumbnailPhoto;
         $thumbnailPhotoHash = Get-MD5HashString -Bytes $thumbnailPhotoBytes;
         Write-Verbose -Message ($LocalizedData.SettingADUserProperty -f 'ThumbnailPhoto', $thumbnailPhotoHash);
         [ref] $null = Set-ADUser @setADUserParams -Replace @{ thumbnailPhoto = $thumbnailPhotoBytes; }
