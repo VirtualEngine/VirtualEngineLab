@@ -47,6 +47,8 @@ implementation of internal lab configurations.
  * Installs RDS roles and optionally, Remote Assistance and Desktop Experience
  * Adds users/groups to the local Remote Desktop Users group
  * Configures the RDS license server
+* vServerManager
+ * Disables Server Manager upon login
 * vSQLExpress
  * Enables NetFX 3.5 and installs SQL Express 2012/2014
 * vWebServer
