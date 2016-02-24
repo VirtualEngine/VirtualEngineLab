@@ -67,7 +67,7 @@ configuration vExchange2013Https {
         Credential = $Credential;
         CertCreds = $PfxCertificateCredential;
         CertFilePath = $PfxCertificatePath;
-        Services = 'IIS';
+        Services = 'IIS','SMTP';
         Ensure = 'Present';
         DependsOn = '[xPackage]ExchangeInstall';
     }
