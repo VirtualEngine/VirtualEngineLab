@@ -5,7 +5,7 @@ configuration vServerManager {
         [System.Boolean] $Enable
     )
 
-    Import-DscResource -Name PSDesiredStateConfiguration;
+    Import-DscResource -ModuleName PSDesiredStateConfiguration;
     
     Registry 'ServerManager' {
         Key = 'HKEY_LOCAL_MACHINE\Software\Microsoft\ServerManager';
