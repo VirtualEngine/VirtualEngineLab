@@ -10,7 +10,10 @@ configuration vWebServerRedirect {
         
         ## Default document path
         [Parameter()] [ValidateNotNullOrEmpty()]
-        [System.String] $Path = 'C:\inetpub\wwwroot\index.htm'
+        [System.String] $Path = 'C:\inetpub\wwwroot\index.htm',
+        
+        [Parameter()] [ValidateSet('Present','Absent')]
+        [System.String] $Ensure = 'Present'
     )
     
     Import-DSCResource -Module PSDesiredStateConfiguration;
@@ -26,6 +29,7 @@ window.location="$RedirectUrl";
     File 'vWebServerRedirect' {
         DestinationPath = $Path;
         Contents = $defaultDocument;
-        Type = 'File';
+        Type = 'File'
+        Ensure = $Ensure;
     }
 } #end configuration vWebServerRedirect
