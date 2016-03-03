@@ -40,7 +40,7 @@ configuration vExchange2013 {
         Name = 'Exchange 2013';
         ProductId = '{4934D1EA-BE46-48B1-8847-F1AF20E892C1}';
         Path = $Path;
-        Arguments = '/mode:Install /role:Mailbox,ClientAccess /Iacceptexchangeserverlicenseterms';
+        Arguments = '/mode:Install /role:Mailbox,ClientAccess /IAcceptExchangeServerLicenseTerms';
         RunAsCredential = $Credential;
         DependsOn = '[vExchange2013Prerequisites]ExchangePrerequisites','[vExchange2013ADPrep]ExchangeADPrep','[xPendingReboot]PendingRebootPreInstall';
     }

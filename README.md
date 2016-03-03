@@ -55,6 +55,8 @@ implementation of internal lab configurations.
  * Installs standard IIS web server roles/features
 * vWebServerHttps
  * Installs standard IIS web server roles/features and imports PFX certificate
+* vWebServerRedirect
+ * Creates a Javascript HTML redirection file 
 * vWorkgroupMember
  * Configures the TCP/IP stack and computer name
 
