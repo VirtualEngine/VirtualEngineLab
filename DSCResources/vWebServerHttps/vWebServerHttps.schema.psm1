@@ -13,7 +13,7 @@ configuration vWebServerHttps {
         [System.Management.Automation.PSCredential] $PfxCertificateCredential
     )
     
-    Import-DSCResource -Module xCertificate, xWebAdministration;
+    Import-DSCResource -ModuleName xCertificate, xWebAdministration;
 
     $features = @(
         'NET-Framework-45-ASPNET',

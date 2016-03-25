@@ -13,7 +13,7 @@ configuration vExchange2013ADPrep {
         [System.String] $OrganizationName
     )
     
-    Import-DscResource -Module xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
 
     $registryKey = 'Software\VirtualEngine';
     $forestPrepValue = 'ExchangeForestPrep';

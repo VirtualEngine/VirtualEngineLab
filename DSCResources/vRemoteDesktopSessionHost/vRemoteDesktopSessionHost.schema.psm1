@@ -19,7 +19,7 @@ configuration vRemoteDesktopSessionHost {
         [System.Boolean] $InstallDesktopExperience = $true
     )
 
-    Import-DscResource -Name PSDesiredStateConfiguration;
+    Import-DscResource -ModuleName PSDesiredStateConfiguration;
 
     WindowsFeature 'RDS-RD-Server' {
         Name = 'RDS-RD-Server';

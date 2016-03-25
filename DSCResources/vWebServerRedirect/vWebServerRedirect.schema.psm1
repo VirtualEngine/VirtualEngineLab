@@ -16,7 +16,7 @@ configuration vWebServerRedirect {
         [System.String] $Ensure = 'Present'
     )
     
-    Import-DSCResource -Module PSDesiredStateConfiguration;
+    Import-DSCResource -ModuleName PSDesiredStateConfiguration;
     
     $defaultDocument = @"
 <script type="text/javascript">

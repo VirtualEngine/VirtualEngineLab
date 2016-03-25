@@ -29,7 +29,7 @@ configuration vExchange2013Https {
         [System.Management.Automation.PSCredential] $PfxCertificateCredential
     )
 
-    Import-DscResource -Module xPSDesiredStateConfiguration, xPendingReboot, xExchange;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration, xPendingReboot, xExchange;
     ## Avoid recursive loading of the VirtualEngineLab composite module
     Import-DscResource -Name vExchange2013Prerequisites, vExchange2013ADPrep;
 

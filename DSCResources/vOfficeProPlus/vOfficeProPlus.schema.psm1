@@ -18,7 +18,7 @@ configuration vOfficeProPlus {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -Module PSDesiredStateConfiguration;
+    Import-DscResource -ModuleName PSDesiredStateConfiguration;
 
     switch ($Version) {
         '2010' {

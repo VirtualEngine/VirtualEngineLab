@@ -6,7 +6,7 @@ configuration vPowerPointViewer {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -Module xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
 
     xPackage 'PowerPointViewer' {
         Name = 'Microsoft PowerPoint Viewer';

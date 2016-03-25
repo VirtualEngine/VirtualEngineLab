@@ -18,7 +18,7 @@ configuration vFile {
         [Parameter()] [ValidateSet('File','Directory')] $Type = 'File'
     )
 
-    Import-DscResource -Module xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
 
     $uriScheme = (New-Object -TypeName System.Uri).Scheme;
     if ($uriScheme -eq 'http') {

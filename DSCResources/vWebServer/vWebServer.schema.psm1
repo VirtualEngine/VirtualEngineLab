@@ -1,5 +1,7 @@
 configuration vWebServer {
     param ( )
+    
+    Import-DscResource -ModuleName PSDesiredStateConfiguration;
 
     $features = @(
         'NET-Framework-45-ASPNET',

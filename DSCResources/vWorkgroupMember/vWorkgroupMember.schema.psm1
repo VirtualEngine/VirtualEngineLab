@@ -24,7 +24,7 @@ configuration vWorkgroupMember {
         [System.String] $DnsServer
     )
 
-    Import-DscResource -Module xComputerManagement, xNetworking;
+    Import-DscResource -ModuleName xComputerManagement, xNetworking;
 
     if ($IPAddress) {
         xIPAddress IP {

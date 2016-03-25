@@ -15,7 +15,7 @@ configuration vAppV5 {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -Module PSDesiredStateConfiguration;
+    Import-DscResource -ModuleName PSDesiredStateConfiguration;
 
     switch ($Version) {
         '5.0' {

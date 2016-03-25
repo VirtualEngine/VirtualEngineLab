@@ -11,7 +11,7 @@
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -Module xActiveDirectory;
+    Import-DscResource -ModuleName xActiveDirectory;
 
     foreach ($feature in @('DNS','AD-Domain-Services','RSAT-AD-PowerShell')) {
         WindowsFeature $($feature.Replace('-','')) {

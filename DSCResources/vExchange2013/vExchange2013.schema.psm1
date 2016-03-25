@@ -17,7 +17,7 @@ configuration vExchange2013 {
         [System.String] $OrganizationName
     )
 
-    Import-DscResource -Module xPSDesiredStateConfiguration, xPendingReboot;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration, xPendingReboot;
     ## Avoid recursive loading of the VirtualEngineLab composite module
     Import-DscResource -Name vExchange2013Prerequisites, vExchange2013ADPrep;
 

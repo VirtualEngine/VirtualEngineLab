@@ -10,7 +10,7 @@ configuration vICMP {
         [System.Boolean] $IPv6 = $true
     )
  
-    Import-DscResource -Module xNetworking;
+    Import-DscResource -ModuleName xNetworking;
 
     xFirewall 'ICMPv4' {
         Name = 'FPS-ICMP4-ERQ-In';

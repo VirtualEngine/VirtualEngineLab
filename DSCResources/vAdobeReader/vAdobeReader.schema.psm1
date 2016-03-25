@@ -9,7 +9,7 @@ configuration vAdobeReader {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -Module PSDesiredStateConfiguration, xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xPSDesiredStateConfiguration;
 
     switch ($Version) {
         'XI' {

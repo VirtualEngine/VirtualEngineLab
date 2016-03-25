@@ -10,7 +10,7 @@ configuration vFirefox {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -Module PSDesiredStateConfiguration, xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xPSDesiredStateConfiguration;
 
     $firefoxIniPath = Join-Path -Path "$env:SYSTEMROOT\Temp\" -ChildPath 'Firefox.ini';
     $firefoxIni = @'

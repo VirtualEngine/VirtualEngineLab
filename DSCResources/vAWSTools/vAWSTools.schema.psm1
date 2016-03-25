@@ -14,7 +14,7 @@ configuration vAWSTools {
         [Parameter()] [ValidateNotNullOrEmpty()] [System.String] $Uri = 'http://sdk-for-net.amazonwebservices.com/latest/AWSToolsAndSDKForNet.msi'
     )
 
-    Import-DscResource -Module xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
    
     File 'Sources' {
         DestinationPath = $SourcePath;

@@ -5,7 +5,7 @@ configuration vExchange2013Prerequisites {
         [System.String] $UCMAPath
     )
 
-    Import-DscResource -Module xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
 
     foreach ($feature in @(
         'AS-HTTP-Activation',

@@ -31,7 +31,7 @@ configuration vDomainMember {
         [System.String] $TargetOU
     )
 
-    Import-DscResource -Module xComputerManagement, xNetworking;
+    Import-DscResource -ModuleName xComputerManagement, xNetworking;
     Import-DscResource -Name vIPAddress, vDNSServerAddress, vDefaultGatewayAddress;
 
     $resourceDependsOn = @();

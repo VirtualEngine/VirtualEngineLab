@@ -6,7 +6,7 @@ configuration vAccessDBEngine2010 {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -Module xPSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
 
     xPackage 'MSAccessDBEngine2010' {
         Name = 'Microsoft Access Database Engine 2010 Redistributable';
