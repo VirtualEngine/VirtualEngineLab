@@ -88,6 +88,7 @@ configuration vSQLExpress {
 
     xFirewall 'SQLFirewall' {
         Name = 'MSSQL-TCP-1433-In';
+        Group = 'Microsoft SQL Server';
         Action = 'Allow';
         Direction = 'Inbound';
         DisplayName = 'MS SQL Server (MSSQLServer)';
@@ -96,6 +97,7 @@ configuration vSQLExpress {
         LocalPort = '1433';
         Protocol = 'TCP';
         Description = 'Default MS SQL Server instance';
+        Ensure = $Ensure;
     }
 
 } #end configuration vSQLExpress
