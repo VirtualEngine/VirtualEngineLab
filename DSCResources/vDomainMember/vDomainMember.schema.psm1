@@ -31,7 +31,7 @@ configuration vDomainMember {
         [System.String] $TargetOU
     )
 
-    Import-DscResource -ModuleName xComputerManagement, xNetworking;
+    Import-DscResource -ModuleName xComputerManagement, xNetworking, xActiveDirectory;
     Import-DscResource -Name vIPAddress, vDNSServerAddress, vDefaultGatewayAddress;
 
     $resourceDependsOn = @();
@@ -103,15 +103,27 @@ configuration vDomainMember {
             }
         }
         
-    } #end InterfaceAlias like Ethernet 
+    } #end InterfaceAlias like Ethernet
+    
+    
     
     if ($resourceDependsOn.Count -ge 1) {
+        
+        ## Add a pause to wait for IP stack to be able to communicate with AD
+        xWaitForADDomain 'WaitForADDomain' {
+            DomainName = $DomainName;
+            DomainUserCredential = $domainCredential;
+            RetryIntervalSec = 5;
+            RetryCount = 12;
+            DependsOn = $resourceDependsOn;
+        } 
+        
         if ([System.String]::IsNullOrEmpty($TargetOU)) {
             xComputer 'ComputerName' {
                 Name = $ComputerName;
                 DomainName = $DomainName;
                 Credential = $domainCredential;
-                DependsOn = $resourceDependsOn;
+                DependsOn = '[xWaitForADDomain]WaitForADDomain';
             }
         }
         else {
@@ -120,16 +132,26 @@ configuration vDomainMember {
                 DomainName = $DomainName;
                 JoinOU = $TargetOU;
                 Credential = $domainCredential;
-                DependsOn = $resourceDependsOn;
+                DependsOn = '[xWaitForADDomain]WaitForADDomain';
             }
         }
     } #end if dependecnies
     else {
+        
+        ## Add a pause to wait for IP stack to be able to communicate with AD
+        xWaitForADDomain 'WaitForADDomain' {
+            DomainName = $DomainName;
+            DomainUserCredential = $domainCredential;
+            RetryIntervalSec = 5;
+            RetryCount = 12;
+        } 
+        
         if ([System.String]::IsNullOrEmpty($TargetOU)) {
             xComputer 'ComputerName' {
                 Name = $ComputerName;
                 DomainName = $DomainName;
                 Credential = $domainCredential;
+                DependsOn = '[xWaitForADDomain]WaitForADDomain';
             }
         }
         else {
@@ -138,6 +160,7 @@ configuration vDomainMember {
                 DomainName = $DomainName;
                 JoinOU = $TargetOU;
                 Credential = $domainCredential;
+                DependsOn = '[xWaitForADDomain]WaitForADDomain';
             }
         }
     } #end if no dependencies
