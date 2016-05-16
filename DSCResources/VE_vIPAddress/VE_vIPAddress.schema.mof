@@ -1,8 +1,0 @@
-[ClassVersion("1.0.0"), FriendlyName("vIPAddress")]
-class VE_vIPAddress : OMI_BaseResource
-{
-  [Key] string IPAddress;
-  [Key] string InterfaceAlias;
-  [Write] uint32 SubnetMask;
-  [Write,ValueMap{"IPv4"},Values{"IPv4"}] string AddressFamily;
-};

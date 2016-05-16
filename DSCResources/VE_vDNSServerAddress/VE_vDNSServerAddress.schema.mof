@@ -1,7 +1,0 @@
-[ClassVersion("1.0.0"), FriendlyName("vDNSServerAddress")] 
-class VE_vDNSServerAddress : OMI_BaseResource
-{
-  [Required] string Address[];
-  [Key] string InterfaceAlias;
-  [Write,ValueMap{"IPv4"},Values{"IPv4"}] string AddressFamily;
-};
