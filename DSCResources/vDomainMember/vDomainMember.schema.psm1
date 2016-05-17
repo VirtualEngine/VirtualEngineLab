@@ -28,11 +28,19 @@ configuration vDomainMember {
         [System.String] $DnsServer,
         
         [Parameter()] [AllowNull()]
-        [System.String] $TargetOU
+        [System.String] $TargetOU,
+        
+        ## Domain join retry interval
+        [Parameter()]
+        [System.Int32] $RetryIntervalSec = 60,
+        
+        ## Domain join retry count
+        [Parameter()]
+        [System.Int32] $RetryCount = 60
     )
 
-    Import-DscResource -ModuleName xComputerManagement, xNetworking, xActiveDirectory;
-    Import-DscResource -Name vIPAddress, vDNSServerAddress, vDefaultGatewayAddress;
+    Import-DscResource -ModuleName xComputerManagement, xActiveDirectory;
+    Import-DscResource -ModuleName xNetworking, LegacyNetworking;
 
     $resourceDependsOn = @();
     $domainCredential = $Credential;
@@ -105,16 +113,14 @@ configuration vDomainMember {
         
     } #end InterfaceAlias like Ethernet
     
-    
-    
     if ($resourceDependsOn.Count -ge 1) {
         
         ## Add a pause to wait for IP stack to be able to communicate with AD
         xWaitForADDomain 'WaitForADDomain' {
             DomainName = $DomainName;
             DomainUserCredential = $domainCredential;
-            RetryIntervalSec = 5;
-            RetryCount = 12;
+            RetryIntervalSec = $RetryIntervalSec;
+            RetryCount = $RetryCount;
             DependsOn = $resourceDependsOn;
         } 
         
@@ -135,6 +141,7 @@ configuration vDomainMember {
                 DependsOn = '[xWaitForADDomain]WaitForADDomain';
             }
         }
+        
     } #end if dependecnies
     else {
         
@@ -142,8 +149,8 @@ configuration vDomainMember {
         xWaitForADDomain 'WaitForADDomain' {
             DomainName = $DomainName;
             DomainUserCredential = $domainCredential;
-            RetryIntervalSec = 5;
-            RetryCount = 12;
+            RetryIntervalSec = $RetryIntervalSec;
+            RetryCount = $RetryCount;
         } 
         
         if ([System.String]::IsNullOrEmpty($TargetOU)) {
@@ -165,4 +172,4 @@ configuration vDomainMember {
         }
     } #end if no dependencies
 
-} #end configurationvDomainMember
+} #end configuration vDomainMember
