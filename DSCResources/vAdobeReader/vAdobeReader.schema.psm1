@@ -22,7 +22,7 @@ configuration vAdobeReader {
         }
     }
 
-    xPackage 'AdoberReader' {
+    xPackage 'AdobeReader' {
         Name = $productName;
         ProductId = '';
         Path = $Path;
@@ -41,7 +41,7 @@ configuration vAdobeReader {
             ValueData = '0';
             ValueType = 'Dword';
             Ensure = 'Present';
-            DependsOn = '[xPackage]AdoberReader';
+            DependsOn = '[xPackage]AdobeReader';
         }
     } #end foreach \xx\FeatureLockdown
     
@@ -53,7 +53,7 @@ configuration vAdobeReader {
             ValueData = '1';
             ValueType = 'Dword';
             Ensure = 'Present';
-            DependsOn = '[xPackage]AdoberReader';
+            DependsOn = '[xPackage]AdobeReader';
         }
     } #end foreach \xx\FeatureLockdown
     
@@ -65,7 +65,7 @@ configuration vAdobeReader {
             ValueData = '0';
             ValueType = 'Dword';
             Ensure = 'Present';
-            DependsOn = '[xPackage]AdoberReader';
+            DependsOn = '[xPackage]AdobeReader';
         }
     } #end foreach \xx\FeatureLockdown\cServices
 
