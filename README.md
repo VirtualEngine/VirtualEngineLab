@@ -83,7 +83,9 @@ implementation of internal lab configurations.
  * Installs standard IIS web server roles/features and imports PFX certificate
  * Requires: xCertificate and xWebAdministration
 * vWebServerRedirect
- * Creates a Javascript HTML redirection file 
+ * Creates a Javascript HTML redirection file
+* vWindowsSignInAnimation
+ * Enables/disables the Windows 8/10 sign-in animation
 * vWorkgroupMember
  * Configures the TCP/IP stack and computer name
  * Requires: xComputerManagement, xNetworking and LegacyNetworking
