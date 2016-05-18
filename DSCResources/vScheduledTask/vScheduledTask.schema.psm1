@@ -36,7 +36,7 @@ configuration vScheduledTask {
             }
         }
         
-        GetScript = {
+        SetScript = {
             if ($using:State -eq 'Enabled') {
                 [ref] $null = Enable-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath;
             }
