@@ -84,6 +84,8 @@ implementation of internal lab configurations.
  * Requires: xCertificate and xWebAdministration
 * vWebServerRedirect
  * Creates a Javascript HTML redirection file
+* vWindowsHelpTips
+ * Enables/disables the Windows 8 help tips
 * vWindowsSignInAnimation
  * Enables/disables the Windows 8/10 sign-in animation
 * vWorkgroupMember
