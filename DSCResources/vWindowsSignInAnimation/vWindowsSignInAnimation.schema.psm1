@@ -4,7 +4,7 @@ configuration vWindowsSignInAnimation {
         Enables or disables Windows 8/10 sign-in animations
 #>
     param (
-        [Parameter(Mandatory)] [ValidateSet('Enable','Disable')]
+        [Parameter(Mandatory)] [ValidateSet('Enabled','Disabled')]
         [System.String] $State
     )
     
