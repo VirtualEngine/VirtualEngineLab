@@ -4,8 +4,13 @@ configuration vAppV5Hotfix {
         [Parameter(Mandatory)] [ValidateNotNull()]
         [System.String] $Path,
         
+        ## Hotfix (un)install display name
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
-        [System.String] $ProductId,
+        [System.String] $PackageDisplayName,
+
+        ## App-V product code
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $ProductId = '',
         
         [Parameter()]
         [System.Boolean] $EnablePackageScripts = $true,
@@ -17,9 +22,10 @@ configuration vAppV5Hotfix {
     # Import the module that defines custom resources
     Import-DscResource -ModuleName xPSDesiredStateConfiguration;
      
-    $resourceId = $ProductId.Replace('{','').Replace('}','').Replace('-','');
+    $resourceId = $PackageDisplayName.Replace('()','').Replace(')','').Replace(' ','');
     xPackage $resourceId {
-        Name = 'Microsoft Application Virtualization (App-V) Client';
+        ## Cannot use the actual 'Microsoft Application Virtualization (App-V) Client' package name!
+        Name = $PackageDisplayName;
         Path = $Path;
         ProductId = $ProductId;
         Arguments = '/ACCEPTEULA=1 /CEIPOPTIN=0 /ENABLEPACKAGESCRIPTS={0} /NORESTART /q' -f ([System.Int32]$EnablePackageScripts);
@@ -27,4 +33,4 @@ configuration vAppV5Hotfix {
         Ensure = $Ensure;
     }
 
-} #end configuration vAppV5
+} #end configuration vAppV5Hotfix
