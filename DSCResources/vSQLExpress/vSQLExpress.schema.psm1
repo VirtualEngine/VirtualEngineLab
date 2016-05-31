@@ -9,7 +9,7 @@ configuration vSQLExpress {
         [System.String] $Path,
         
         ## Version of SQL we're installing (needed to determine the ProductId).
-        [Parameter()] [ValidateSet('2012','2014')]
+        [Parameter(Mandatory)] [ValidateSet('2012','2014')]
         [System.String] $Version = '2014',
         
         ## SQL Express server instance name.
@@ -25,27 +25,37 @@ configuration vSQLExpress {
         [PSCredential] $SAPassword,
         
         ## Enable SQL Express TCP/IP connectivity. Defaults to True.
-        [Parameter()] [System.Boolean]
-        $TcpEnabled = $true,
+        [Parameter()]
+        [System.Boolean] $TcpEnabled = $true,
         
         ## Enable SQL Express Named Pipes connectivity. Defaults to True.
-        [Parameter()] [System.Boolean]
-        $NpeEnabled = $true,
+        [Parameter()]
+        [System.Boolean] $NpeEnabled = $true,
         
         ## Whether to ensure that SQL Express is installed or removed.
         [Parameter()] [ValidateSet('Present','Absent')]
-        $Ensure = 'Present',
+        [System.String] $Ensure = 'Present',
         
+        ## Product display name (used for product detection)
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String] $ProductName = ('Microsoft SQL Server {0} Setup (English)' -f $Version),
+        
+        ## Install Microsoft .Net Framework 3.0 feature. Defaults to True.
+        [Parameter()]
+        [System.Boolean] $InstallNetFrameworkCore = $true,
+                
         ## Credential to access Setup.exe
         [Parameter()]
         [System.Management.Automation.PSCredential] $Credential
     )
 
-    Import-DscResource -ModuleName xNetworking;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration, xNetworking;
    
-    WindowsFeature NetFX35 {
-	    Ensure = 'Present';
-	    Name = 'Net-Framework-Core';
+    if ($InstallNetFrameworkCore) {
+        WindowsFeature NetFX35 {
+	        Ensure = 'Present';
+	        Name = 'Net-Framework-Core';
+        }
     }
 
     $tcpEnabledString = if ($TcpEnabled -eq $true) { '1' } else { '0' };
@@ -59,30 +69,36 @@ configuration vSQLExpress {
     }
     [ref] $null = $packageArguments.Append(' /SQLSYSADMINACCOUNTS="Builtin\Administrators" /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" /IACCEPTSQLSERVERLICENSETERMS');
 
-    switch ($Version) {
-        '2012' { $packageProductId = '18B2A97C-92C3-4AC7-BE72-F823E0BC895B'; }
-        '2014' { $packageProductId = '0EEBDCCA-EF5D-4896-9FEA-D7D410A57E8A'; }
-    }
+    $resourceId = 'SQL{0}ExpressPackage' -f $Version;
 
-    if ($Credential) {
-        Package 'SQLExpressInstall' {
+    if ($Credential -and $InstallNetFrameworkCore) {
+        xPackage $resourceId {
             Ensure = $Ensure;
-            Name = 'SQL Express';
+            Name = $ProductName;
             Path = $Path;
-            ProductId = $packageProductId;
+            ProductId = '';
             Arguments = $packageArguments.ToString();
             DependsOn = '[WindowsFeature]NetFx35';
             Credential = $Credential;
         }
     }
-    else {
-        Package 'SQLExpressInstall' {
+    elseif ($InstallNetFrameworkCore) {
+        xPackage $resourceId {
             Ensure = $Ensure;
-            Name = 'SQL Express';
+            Name = $ProductName;
             Path = $Path;
-            ProductId = $packageProductId;
+            ProductId = '';
             Arguments = $packageArguments.ToString();
             DependsOn = '[WindowsFeature]NetFx35';
+        }
+    }
+    else {
+        xPackage $resourceId {
+            Ensure = $Ensure;
+            Name = $ProductName;
+            Path = $Path;
+            ProductId = '';
+            Arguments = $packageArguments.ToString();
         }
     }
 
@@ -98,6 +114,7 @@ configuration vSQLExpress {
         Protocol = 'TCP';
         Description = 'Default MS SQL Server instance';
         Ensure = $Ensure;
+        DependsOn = "[xPackage]$resourceId";
     }
 
 } #end configuration vSQLExpress
