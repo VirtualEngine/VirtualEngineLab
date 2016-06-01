@@ -9,7 +9,7 @@ configuration vSQLExpress {
         [System.String] $Path,
         
         ## Version of SQL we're installing (needed to determine the ProductId).
-        [Parameter(Mandatory)] [ValidateSet('2012','2014')]
+        [Parameter()] [ValidateSet('2012','2014')]
         [System.String] $Version = '2014',
         
         ## SQL Express server instance name.
