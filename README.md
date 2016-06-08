@@ -54,6 +54,9 @@ implementation of internal lab configurations.
  * Requires: xPSDesiredStateConfiguration
 * vOfficeProPlus
  * Installs and configures Office 2010, 2013 or 2016 Professional Plus and configures KMS server
+* vPerformanceSetting
+ * Configures the active power plan, System Restore settings and/or visual effects
+ * Requires: xWindowsRestore, StackExchangeResources
 * vPowerPointViewer
  * Installs Microsoft PowerPoint Viewer
  * Requires: xPSDesiredStateConfiguration
@@ -104,4 +107,6 @@ There are __dependencies__ on the following DSC resources:
 * xWebAdministration - https://github.com/Powershell/xWebAdministration
 * xPendingReboot - https://github.com/Powershell/xPendingReboot
 * xCertificate - https://github.com/Powershell/xCertificate
+* xWindowsRestore - https://github.com/Powershell/xWindowsRestore
+* StackExchangeResources - https://github.com/PowerShellOrg/StackExchangeResources
 * LegacyNetworking - https://github.com/VirtualEngine/LegacyNetworking

@@ -1,0 +1,75 @@
+configuration vPerformanceSetting {
+    param (
+        ## System Power Plan to configure
+        [Parameter()] [ValidateNotNull()]
+        [System.String] $PowerPlan,
+
+        ## Drives to disable system restore upon
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String[]] $DisabledSystemRestoreDrive,
+
+        ## Disables default Windows Explorer visual effects
+        [Parameter()]
+        [System.Boolean] $DisableVisualEffects
+    )
+ 
+    # Import the module that defines custom resources
+    Import-DscResource -ModuleName xWindowsRestore, StackExchangeResources, PSDesiredStateConfiguration;
+
+    if ($PSBoundParameters.ContainsKey('PowerPlan')) {
+        PowerPlan 'PowerPlan' {
+            Name = $PowerPlan;
+            Ensure = 'Present';
+        }
+    }
+
+    if ($PSBoundParameters.ContainsKey('DisabledSystemRestoreDrive')) {
+        xSystemRestore 'SystemRestore' {
+            Drive = $DisabledSystemRestoreDrive;
+            Ensure = 'Absent';
+        }
+    }
+
+    if ($DisableVisualEffects) {
+
+        $visualEffects = @(
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects'; ValueName = 'VisualFXSetting'; ValueType = 'DWORD'; ValueData = '3'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\CursorShadow'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DragFullWindows'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DropShadow'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DWMAeroPeekEnabled'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DWMEnabled'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DWMSaveThumbnailEnabled'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '1'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListBoxSmoothScrolling'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListviewAlphaSelect'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListviewShadow'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '1'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\SelectionFade'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\Themes'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '1'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ThumbnailsOrIcon'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+            @{ Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TransparentGlass'; ValueName = 'DefaultValue'; ValueType = 'DWORD'; ValueData = '0'; }
+        )
+
+        foreach ($registrySetting in $visualEffects) {
+
+            $resourceId = 'VisualEffect_{0}' -f ($registrySetting.Key).Split('\')[-1];
+
+            Registry $resourceId {
+                Key = $registrySetting.Key;
+                ValueName = $registrySetting.ValueName;
+                ValueType = $registrySetting.ValueType;
+                ValueData = $registrySetting.ValueData;
+                Ensure = 'Present';
+            }
+
+        } #end foreach registry setting
+
+    } #end if Disable Visual Effects
+
+} #end configuration vPerformanceSettings
