@@ -10,7 +10,20 @@ configuration vPerformanceSetting {
 
         ## Disables default Windows Explorer visual effects
         [Parameter()]
-        [System.Boolean] $DisableVisualEffects
+        [System.Boolean] $DisableVisualEffects,
+
+        ## Disables Windows login animations
+        [Parameter()]
+        [System.Boolean] $DisableLogonAnimation,
+
+        ## Disables Windows 8 help tips
+        [Parameter()]
+        [System.Boolean] $DisableHelpTips,
+
+        ## Disable Server Manager on logon
+        [Parameter()]
+        [System.Boolean] $DisableServerManagerOnLogon
+
     )
  
     # Import the module that defines custom resources
@@ -27,6 +40,36 @@ configuration vPerformanceSetting {
         xSystemRestore 'SystemRestore' {
             Drive = $DisabledSystemRestoreDrive;
             Ensure = 'Absent';
+        }
+    }
+
+    if ($PSBoundParameters.ContainsKey('DisableHelpTips')) {
+        Registry 'DisableHelpSticker' {
+            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI';
+            ValueName = 'DisableHelpSticker';
+            ValueData = $DisableHelpTips -as [System.String];
+            ValueType = 'Dword';
+            Ensure = 'Present';
+        }
+    }
+
+    if ($PSBoundParameters.ContainsKey('DisableLogonAnimation')) {
+        Registry 'EnableFirstLogonAnimation' {
+            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System';
+            ValueName = 'EnableFirstLogonAnimation';
+            ValueData = (-not $DisableLogonAnimation) -as [System.String];
+            ValueType = 'Dword';
+            Ensure = 'Present';
+        }
+    }
+
+    if ($PSBoundParameters.ContainsKey('DisableServerManagerOnLogon')) {
+        Registry 'ServerManager' {
+            Key = 'HKEY_LOCAL_MACHINE\Software\Microsoft\ServerManager';
+            ValueName = 'DoNotOpenServerManagerAtLogon';
+            ValueData =  $DisableServerManagerOnLogon -as [System.String];
+            ValueType = 'Dword';
+            Ensure = 'Present';
         }
     }
 
@@ -57,9 +100,7 @@ configuration vPerformanceSetting {
         )
 
         foreach ($registrySetting in $visualEffects) {
-
-            $resourceId = 'VisualEffect_{0}' -f ($registrySetting.Key).Split('\')[-1];
-
+            $resourceId = ($registrySetting.Key).Split('\')[-1];
             Registry $resourceId {
                 Key = $registrySetting.Key;
                 ValueName = $registrySetting.ValueName;
@@ -67,7 +108,6 @@ configuration vPerformanceSetting {
                 ValueData = $registrySetting.ValueData;
                 Ensure = 'Present';
             }
-
         } #end foreach registry setting
 
     } #end if Disable Visual Effects

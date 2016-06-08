@@ -1,7 +1,7 @@
 The VirtualEngineLab composite DSC resources provide a common set of DSC resources that simplify the
 implementation of internal lab configurations.
 
-###Included Resources
+### Included Resources
 * vAccessDBEngine2010
  * Installs the Microsoft Access Database Engine 2010 components
  * Requires: xPSDesiredStateConfiguration
@@ -55,7 +55,13 @@ implementation of internal lab configurations.
 * vOfficeProPlus
  * Installs and configures Office 2010, 2013 or 2016 Professional Plus and configures KMS server
 * vPerformanceSetting
- * Configures the active power plan, System Restore settings and/or visual effects
+ * Configures and manages:
+   * Active power plan
+   * Server Manager auto start
+   * System Restore settings
+   * Windows Explorer Visual effects
+   * Windows Explorer help tips
+   * Windows Explorer logon animations
  * Requires: xWindowsRestore, StackExchangeResources
 * vPowerPointViewer
  * Installs Microsoft PowerPoint Viewer
@@ -75,8 +81,6 @@ implementation of internal lab configurations.
 * vScheduledTask
  * Enables/disables _existing_ scheduled tasks.
  * __Requires Server 2012/Windows 8 or later.__
-* vServerManager
- * Disables Server Manager upon login
 * vSQLExpress
  * Enables NetFX 3.5 and installs SQL Express 2012/2014
  * Requires: xNetworking
@@ -87,15 +91,11 @@ implementation of internal lab configurations.
  * Requires: xCertificate and xWebAdministration
 * vWebServerRedirect
  * Creates a Javascript HTML redirection file
-* vWindowsHelpTips
- * Enables/disables the Windows 8 help tips
-* vWindowsSignInAnimation
- * Enables/disables the Windows 8/10 sign-in animation
 * vWorkgroupMember
  * Configures the TCP/IP stack and computer name
  * Requires: xComputerManagement, xNetworking and LegacyNetworking
 
-###Requirements
+### Requirements
 There are __dependencies__ on the following DSC resources:
 
 * xActiveDirectory - https://github.com/Powershell/xActiveDirectory
