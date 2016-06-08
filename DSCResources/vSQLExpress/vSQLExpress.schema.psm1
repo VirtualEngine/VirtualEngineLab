@@ -63,7 +63,7 @@ configuration vSQLExpress {
 
     $packageArguments = New-Object System.Text.StringBuilder;
     [ref] $null = $packageArguments.AppendFormat('/Q /ACTION=INSTALL /INSTANCENAME={0} /TCPENABLED={1} /NPENABLED={2}', $Instance, $tcpEnabledString, $npeEnabledString); 
-    [ref] $null = $packageArguments.AppendFormat(' /FEATURES={0} ', [System.String]::Join(',', $Features));
+    [ref] $null = $packageArguments.AppendFormat(' /FEATURES={0}', [System.String]::Join(',', $Features));
     if ($SAPassword) {
         [ref] $null = $packageArguments.AppendFormat(' /SECURITYMODE=SQL /SAPWD={0}', $SAPassword.GetNetworkCredential().Password);
     }

@@ -3,28 +3,42 @@ configuration vRemoteDesktopAdmin {
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present',
         
+        ## Configuration Network Level Authentication
         [Parameter()] [ValidateSet('Secure','NonSecure')]
         [System.String] $UserAuthentication = 'Secure',
         
+        ## Not supported on Windows 7 (use LegacyNetworking module)
         [Parameter()]
         [System.Boolean] $EnableFirewallException = $true,
         
-        [Parameter()] [AllowNull()]
-        [System.String[]] $MembersToInclude = $null,
+        ## Members to include in the 'Remote Desktop Users; group
+        [Parameter()] [ValidateNotNullOrEmpty()]
+        [System.String[]] $MembersToInclude,
         
-        [Parameter()] [AllowNull()]
-        [System.Management.Automation.PSCredential] $Credential = $null
+        ## Domain credentials to enumerate domain groups
+        [Parameter()] [ValidateNotNull()]
+        [System.Management.Automation.PSCredential] $Credential
     )
 
     Import-DscResource -ModuleName xRemoteDesktopAdmin;
     Import-DscResource -ModuleName xNetworking;
 
-    if ($MembersToInclude) {
-        Group 'RemoteDesktopUsers' {
-            GroupName = 'Remote Desktop Users';
-            Ensure = $Ensure;
-            MembersToInclude = $MembersToInclude;
-            Credential = $Credential;
+    if ($PSBoundParameters.ContainsKey('MembersToInclude')) {
+
+        if ($PSBoundParameters.ContainsKey('Credential')) {
+            Group 'RemoteDesktopUsers' {
+                GroupName = 'Remote Desktop Users';
+                Ensure = $Ensure;
+                MembersToInclude = $MembersToInclude;
+                Credential = $Credential;
+            }
+        }
+        else {
+            Group 'RemoteDesktopUsers' {
+                GroupName = 'Remote Desktop Users';
+                Ensure = $Ensure;
+                MembersToInclude = $MembersToInclude;
+            }
         }
     }
 
@@ -38,14 +52,14 @@ configuration vRemoteDesktopAdmin {
             Name = 'RemoteDesktop-UserMode-In-TCP';
             DisplayName = 'Remote Desktop - User Mode (TCP-In)';
             Action = 'Allow';
-            Enabled = $true;
+            Enabled = ($Ensure -eq 'Present');
         }
 
         xFirewall 'RemoteDesktopUserModeInUDP' {
             Name = 'RemoteDesktop-UserMode-In-UDP';
             DisplayName = 'Remote Desktop - User Mode (UDP-In)';
             Action = 'Allow';
-            Enabled = $true;
+            Enabled = ($Ensure -eq 'Present');
         }
     } #end if Enable Firewall
 
