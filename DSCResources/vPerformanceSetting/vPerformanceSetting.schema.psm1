@@ -67,7 +67,7 @@ configuration vPerformanceSetting {
         Registry 'ServerManager' {
             Key = 'HKEY_LOCAL_MACHINE\Software\Microsoft\ServerManager';
             ValueName = 'DoNotOpenServerManagerAtLogon';
-            ValueData =  $DisableServerManagerOnLogon -as [System.String];
+            ValueData =  $DisableServerManager -as [System.String];
             ValueType = 'Dword';
             Ensure = 'Present';
         }
