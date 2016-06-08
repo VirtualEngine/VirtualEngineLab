@@ -22,7 +22,7 @@ configuration vPerformanceSetting {
 
         ## Disable Server Manager on logon
         [Parameter()]
-        [System.Boolean] $DisableServerManagerOnLogon
+        [System.Boolean] $DisableServerManager
 
     )
  
@@ -63,7 +63,7 @@ configuration vPerformanceSetting {
         }
     }
 
-    if ($PSBoundParameters.ContainsKey('DisableServerManagerOnLogon')) {
+    if ($PSBoundParameters.ContainsKey('DisableServerManager')) {
         Registry 'ServerManager' {
             Key = 'HKEY_LOCAL_MACHINE\Software\Microsoft\ServerManager';
             ValueName = 'DoNotOpenServerManagerAtLogon';
