@@ -47,7 +47,7 @@ configuration vPerformanceSetting {
         Registry 'DisableHelpSticker' {
             Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI';
             ValueName = 'DisableHelpSticker';
-            ValueData = $DisableHelpTips -as [System.String];
+            ValueData = $DisableHelpTips -as [System.Int32];
             ValueType = 'Dword';
             Ensure = 'Present';
         }
@@ -57,7 +57,7 @@ configuration vPerformanceSetting {
         Registry 'EnableFirstLogonAnimation' {
             Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System';
             ValueName = 'EnableFirstLogonAnimation';
-            ValueData = (-not $DisableLogonAnimation) -as [System.String];
+            ValueData = (-not $DisableLogonAnimation) -as [System.Int32];
             ValueType = 'Dword';
             Ensure = 'Present';
         }
@@ -67,7 +67,7 @@ configuration vPerformanceSetting {
         Registry 'ServerManager' {
             Key = 'HKEY_LOCAL_MACHINE\Software\Microsoft\ServerManager';
             ValueName = 'DoNotOpenServerManagerAtLogon';
-            ValueData =  $DisableServerManager -as [System.String];
+            ValueData =  $DisableServerManager -as [System.Int32];
             ValueType = 'Dword';
             Ensure = 'Present';
         }
