@@ -49,6 +49,9 @@ implementation of internal lab configurations.
 * vICMP
  * Permits inbound ICMP traffic through the Windows firewall
  * Requires: xNetworking
+* vInternetExplorerSecurity
+ * Enables or disables Internet Explorer Enhanced Security Configuration
+ * Requires: xSystemSecurity
 * vNotepadPlusPlus
  * Installs Notepad++
  * Requires: xPSDesiredStateConfiguration
@@ -98,15 +101,16 @@ implementation of internal lab configurations.
 ### Requirements
 There are __dependencies__ on the following DSC resources:
 
+* LegacyNetworking - https://github.com/VirtualEngine/LegacyNetworking
+* StackExchangeResources - https://github.com/PowerShellOrg/StackExchangeResources
 * xActiveDirectory - https://github.com/Powershell/xActiveDirectory
+* xCertificate - https://github.com/Powershell/xCertificate
 * xComputerManagement - https://github.com/Powershell/xComputerManagement
 * xExchange - https://github.com/Powershell/xExchange
 * xNetworking - https://github.com/Powershell/xNetworking
+* xPendingReboot - https://github.com/Powershell/xPendingReboot
 * xPSDesiredStateConfiguration - https://github.com/Powershell/xPSDesiredStateConfiguration
 * xRemoteDesktopAdmin - https://github.com/Powershell/xRemoteDesktopAdmin
+* xSystemSecurity - https://github.com/Powershell/xSystemSecurity
 * xWebAdministration - https://github.com/Powershell/xWebAdministration
-* xPendingReboot - https://github.com/Powershell/xPendingReboot
-* xCertificate - https://github.com/Powershell/xCertificate
 * xWindowsRestore - https://github.com/Powershell/xWindowsRestore
-* StackExchangeResources - https://github.com/PowerShellOrg/StackExchangeResources
-* LegacyNetworking - https://github.com/VirtualEngine/LegacyNetworking
