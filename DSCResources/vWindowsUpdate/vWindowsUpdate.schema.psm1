@@ -37,7 +37,7 @@ configuration vWindowsUpdate {
     }
 
     xWindowsUpdateAgent 'WindowsUpdateAgent' {
-        IsSingleInstance = $true;
+        IsSingleInstance = 'Yes';
         Category         = $Category;
         Notifications    = $Notifications;
         Source           = $updateSource;
