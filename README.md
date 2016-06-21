@@ -94,6 +94,9 @@ implementation of internal lab configurations.
  * Requires: xCertificate and xWebAdministration
 * vWebServerRedirect
  * Creates a Javascript HTML redirection file
+* vWindowsUpdate
+ * Configures the Windows Update and Microsoft Update agents
+ * Requires: xWindowsUpdate
 * vWorkgroupMember
  * Configures the TCP/IP stack and computer name
  * Requires: xComputerManagement, xNetworking and LegacyNetworking
@@ -114,3 +117,4 @@ There are __dependencies__ on the following DSC resources:
 * xSystemSecurity - https://github.com/Powershell/xSystemSecurity
 * xWebAdministration - https://github.com/Powershell/xWebAdministration
 * xWindowsRestore - https://github.com/Powershell/xWindowsRestore
+* xWindowsUpdate - https://github.com/Powershell/xWindowsUpdate
