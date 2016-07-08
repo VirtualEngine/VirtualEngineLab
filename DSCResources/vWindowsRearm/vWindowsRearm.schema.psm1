@@ -96,9 +96,15 @@ function Test-RegistryValue {
 ##If (test-path $LogFilePath) {Clear-Content -Path $LogFilePath}
 
 $Date = Get-Date -Format g
+$osVersion = Get-WindowsVersion
 
 ## Use WMI to grab all the SoftwareLicensingProduct information
-$SLObj = Get-WmiObject SoftwareLicensingProduct -Filter "Description LIKE '%TIMEBASED_EVAL%'"
+$SLObj = Get-WmiObject SoftwareLicensingProduct -Filter "Description LIKE '%TIMEBASED_EVAL%'" -ErrorAction SilentlyContinue
+
+if (-not $SLObj.RemainingAppReArmCount) {
+    Write-DebugLog("$Date - No rearm property found (possibly VL edition). Exiting.");
+    return;
+}
 
 ## Grace Period is in minutes therefore divide by 1440 to get number of days
 $gpDays = [math]::Round($SLObj.GracePeriodRemaining/1440)
@@ -108,7 +114,7 @@ Write-DebugLog("$Date - Windows License Valid for {0} Days." -f $gpDays)
 Write-DebugLog("$Date - Remaining Rearm Count = {0}." -f $SLObj.RemainingAppReArmCount)
 
 ## Check If Grace Period is less than 1 day and it's not Windows 10
-if ($gpDays -le $Days -and (Get-WindowsVersion) -Notmatch 'Microsoft Windows 10') {
+if (($gpDays -le $Days) -and ($osVersion -Notmatch 'Microsoft Windows 10')) {
 
     ## If Remaining ReArm Count is less that 0, we need to set this registry value to enable us to rearm again.
     if ($SLObj.RemainingAppReArmCount -eq 0) {
