@@ -19,6 +19,8 @@ implementation of internal lab configurations.
  * Requires: Active Directory module to be installed on the enacting node
 * vAppV5
  * Installs App-V 5.0/5.1 client/RDS client
+* vBuildNumber
+ * Stamps build information in the registry
 * vCitrixReceiver
  * Installs Citrix Receiver
  * Requires: xPSDesiredStateConfiguration
