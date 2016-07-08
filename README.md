@@ -87,6 +87,9 @@ implementation of internal lab configurations.
 * vSQLExpress
  * Enables NetFX 3.5 and installs SQL Express 2012/2014
  * Requires: xNetworking
+* vStartupScheduledTask
+ * Creates a simple scheduled task that starts on boot
+ * Uses SCHTASKS.EXE for backward compatibility with Win 7 and Server 2008 R2
 * vWebServer
  * Installs standard IIS web server roles/features
 * vWebServerHttps
