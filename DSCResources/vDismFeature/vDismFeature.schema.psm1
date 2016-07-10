@@ -40,5 +40,5 @@ configuration vDismFeature {
             }
         }
 
-} #end script
+    } #end script
 } #end configuration vDismFeature

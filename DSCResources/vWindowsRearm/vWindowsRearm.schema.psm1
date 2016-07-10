@@ -156,11 +156,21 @@ Write-DebugLog("")
 
     ## Remove spaces in path as SCHTASKS.EXE doesn't like them
     $resourcePath = $DestinationPath.Replace(' ','');
+    $resourceParentPath = Split-Path -Path $resourcePath -Parent;
+
+    File 'WindowsRearm_Parent' {
+        DestinationPath = $resourceParentPath;
+        Type            = 'Directory';
+        Attributes      = 'Hidden','System';
+        Ensure          = 'Present';
+    }
 
     File 'WindowsRearm_ps1' {
         DestinationPath = $resourcePath;
-        Contents = $windowsRearmScript;
-        Type = 'File';
+        Contents        = $windowsRearmScript;
+        Type            = 'File';
+        Ensure          = 'Present';
+        DependsOn       = '[File]WindowsRearm_Parent';
     }
 
     Script 'WindowsRearm_ps1' {
