@@ -24,6 +24,9 @@ implementation of internal lab configurations.
 * vCitrixReceiver
  * Installs Citrix Receiver
  * Requires: xPSDesiredStateConfiguration
+* vDismFeature
+ * Manages Windows features via DISM.EXE
+ * Supports Windows 7
 * vDomainMember
  * Configures the TCP/IP stack, computer name and joins a computer to an Active Directory domain
  * Requires: xActiveDirectory, xNetworking, xComputerManagement and LegacyNetworking
