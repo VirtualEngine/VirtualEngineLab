@@ -5,7 +5,6 @@ configuration vBuildNumber {
         [System.String] $BuildNumber
     )
 
-    # Import the module that defines custom resources
     Import-DscResource -ModuleName PSDesiredStateConfiguration;
 
     Registry 'BuildNumber' {
@@ -23,5 +22,20 @@ configuration vBuildNumber {
         ValueType = 'String';
         Ensure = 'Present';
     }
+
+    Script 'DeploymentDate' {
+        GetScript = {
+            $deploymentDate = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Virtual Engine' -Name 'DeploymentDate' -ErrorAction SilentlyContinue);
+            return @{ Result = $deploymentDate.DeploymentDate; }
+        }
+        TestScript = {
+            $deploymentDate = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Virtual Engine' -Name 'DeploymentDate' -ErrorAction SilentlyContinue);
+            if ($null -ne $deploymentDate.DeploymentDate) { return $true; }
+            else { return $false; }
+        }
+        SetScript = {
+            Set-ItemProperty -Path 'HKLM:\SOFTWARE\Virtual Engine' -Name 'DeploymentDate' -Value (Get-Date).ToString('dd/MM/yyyy HH:mm:ss.ff');
+        }
+    } #end script DeploymentDate
 
 } #end configuration vBuildNumber
