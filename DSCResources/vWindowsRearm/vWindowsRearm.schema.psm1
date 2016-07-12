@@ -156,14 +156,39 @@ Write-DebugLog("")
 
     ## Remove spaces in path as SCHTASKS.EXE doesn't like them
     $resourcePath = $DestinationPath.Replace(' ','');
-    $resourceParentPath = Split-Path -Path $resourcePath -Parent;
+    $resourceParentPath = $resourcePath;
 
-    File 'WindowsRearm_Parent' {
-        DestinationPath = $resourceParentPath;
-        Type            = 'Directory';
-        Attributes      = 'Hidden','System';
-        Ensure          = 'Present';
-    }
+    ## Create the directory struture, hiding each folder..
+    while ((Split-Path -Path $resourceParentPath -Parent) -notmatch '^.:\\$') {
+
+        $resourceParentPath = Split-Path -Path $resourceParentPath -Parent;
+        $resourceName = $resourceParentPath.Replace(':','').Replace('\','_');
+
+        if ($dependsOn) {
+
+            File $resourceName {
+                DestinationPath = $resourceParentPath;
+                Type            = 'Directory';
+                Attributes      = 'Hidden';
+                Ensure          = 'Present';
+                DependsOn       = $dependsOn;
+            }
+
+            $dependsOn += "[File]$resourceName";
+        }
+        else {
+
+            File $resourceName {
+                DestinationPath = $resourceParentPath;
+                Type            = 'Directory';
+                Attributes      = 'Hidden';
+                Ensure          = 'Present';
+            }
+
+            $dependsOn = @("[File]$resourceName");
+        }
+
+    } #end while not root
 
     File 'WindowsRearm_ps1' {
         DestinationPath = $resourcePath;
@@ -173,7 +198,7 @@ Write-DebugLog("")
         DependsOn       = '[File]WindowsRearm_Parent';
     }
 
-    Script 'WindowsRearm_ps1' {
+    Script 'WindowsRearmTask' {
 
         GetScript = {
             $task = & "$env:windir\System32\schtasks.exe" /Query /TN "$using:TaskName" 2>&1;
@@ -209,6 +234,6 @@ Write-DebugLog("")
 
         DependsOn = '[File]WindowsRearm_ps1';
 
-    } #end script WindowsRearm_ps1
+    } #end script WindowsRearmTask
 
 } #end configuration vWindowsRearm
