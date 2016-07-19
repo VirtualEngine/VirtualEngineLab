@@ -159,7 +159,7 @@ Write-DebugLog("")
 
     $resourceParentPath = $resourcePath;
     $resourcePaths = @();
-    $dependsOn = @();
+    $resourceDependsOn = @();
 
     ## Find all the folders in the specified destination path
     while ((Split-Path -Path $resourceParentPath -Parent) -notmatch '^.:\\$') {
@@ -188,11 +188,11 @@ Write-DebugLog("")
                 DestinationPath = $resourcePaths[$i];
                 Type            = 'Directory';
                 Ensure          = 'Present';
-                DependsOn       = $dependsOn;
+                DependsOn       = $resourceDependsOn;
             }
         }
 
-        $dependsOn += "[File]$resourceName";
+        $resourceDependsOn += "[File]$resourceName";
 
     } #end foreach folder
 
@@ -201,7 +201,7 @@ Write-DebugLog("")
         Contents        = $windowsRearmScript;
         Type            = 'File';
         Ensure          = 'Present';
-        DependsOn       = $dependsOn;
+        DependsOn       = $resourceDependsOn;
     }
 
     Script 'WindowsRearmTask' {
