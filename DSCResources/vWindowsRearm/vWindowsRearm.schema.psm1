@@ -156,46 +156,52 @@ Write-DebugLog("")
 
     ## Remove spaces in path as SCHTASKS.EXE doesn't like them
     $resourcePath = $DestinationPath.Replace(' ','');
+
     $resourceParentPath = $resourcePath;
+    $resourcePaths = @();
+    $dependsOn = @();
 
-    ## Create the directory struture, hiding each folder..
+    ## Find all the folders in the specified destination path
     while ((Split-Path -Path $resourceParentPath -Parent) -notmatch '^.:\\$') {
-
         $resourceParentPath = Split-Path -Path $resourceParentPath -Parent;
-        $resourceName = $resourceParentPath.Replace(':','').Replace('\','_');
+        $resourcePaths += $resourceParentPath;
+    }
 
-        if ($dependsOn) {
+    ## Process the discovered folders in reverse order
+    for ($i = ($resourcePaths.Length -1); $i -ge 0; $i--) {
+
+        $resourceName = $resourcePaths[$i].Replace(':','').Replace('\','_');
+
+        ## Only hide the first (root) folder
+        if ($i -eq ($resourcePaths.Length -1)) {
 
             File $resourceName {
-                DestinationPath = $resourceParentPath;
+                DestinationPath = $resourcePaths[$i];
                 Type            = 'Directory';
                 Attributes      = 'Hidden';
                 Ensure          = 'Present';
-                DependsOn       = $dependsOn;
             }
-
-            $dependsOn += "[File]$resourceName";
         }
         else {
 
             File $resourceName {
-                DestinationPath = $resourceParentPath;
+                DestinationPath = $resourcePaths[$i];
                 Type            = 'Directory';
-                Attributes      = 'Hidden';
                 Ensure          = 'Present';
+                DependsOn       = $dependsOn;
             }
-
-            $dependsOn = @("[File]$resourceName");
         }
 
-    } #end while not root
+        $dependsOn += "[File]$resourceName";
+
+    } #end foreach folder
 
     File 'WindowsRearm_ps1' {
         DestinationPath = $resourcePath;
         Contents        = $windowsRearmScript;
         Type            = 'File';
         Ensure          = 'Present';
-        DependsOn       = '[File]WindowsRearm_Parent';
+        DependsOn       = $dependsOn;
     }
 
     Script 'WindowsRearmTask' {
