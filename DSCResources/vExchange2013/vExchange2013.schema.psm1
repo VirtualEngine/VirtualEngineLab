@@ -3,15 +3,15 @@ configuration vExchange2013 {
         ## AD Schema Admin/Enterprise Admin credential
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential] $Credential,
-        
+
         ## Path to Exchange 2013 setup.exe
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $Path,
-        
+
         ## Path to Unified Communications Managed API 4 exe
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $UCMAPath,
-        
+
         ## Exchange organization name
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $OrganizationName
@@ -44,10 +44,31 @@ configuration vExchange2013 {
         RunAsCredential = $Credential;
         DependsOn = '[vExchange2013Prerequisites]ExchangePrerequisites','[vExchange2013ADPrep]ExchangeADPrep','[xPendingReboot]PendingRebootPreInstall';
     }
-        
-    xPendingReboot 'PendingRebootPostInstall' {
-        Name = 'PostInstall';
-        DependsOn = '[xPackage]ExchangeInstall'
-    }
+
+    Script 'PostExchangeInstallReboot' {
+        ## Flag a one-time reboot after Exchange install as xPendingReboot
+        ## doesn't flag the install as requiring a reboot
+
+        GetScript = {
+
+            return @{
+                Result = (Get-ItemProperty -Path 'HKLM:\Software\Virtual Engine' -ErrorAction SilentlyContinue).ExchangeInstalled;
+            }
+
+        }
+        TestScript = {
+
+            $postExchangeInstallData = (Get-ItemProperty -Path 'HKLM:\Software\Virtual Engine' -ErrorAction SilentlyContinue).ExchangeInstalled;
+            return ($null -ne $postExchangeInstallData);
+
+        }
+        SetScript = {
+
+            Set-ItemProperty -Path 'HKLM:\Software\Virtual Engine' -Name 'ExchangeInstalled' -Value 'True';
+            $global:DSCMachineStatus = 1;
+
+        }
+
+    } #end script PostExchangeInstallReboot
 
 } #end configuration vExchange2013

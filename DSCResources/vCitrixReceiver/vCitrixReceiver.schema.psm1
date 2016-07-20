@@ -6,47 +6,47 @@ configuration vCitrixReceiver {
 
         ## Install single sign-on (pass-through) authentication
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $IncludeSSON, #/includeSSON
+        [System.Boolean] $IncludeSSON,
 
         ## Enable single sign-on (pass-through) authentication
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $EnableSSON, # ENABLE_SSON={Yes | No}
+        [System.Boolean] $EnableSSON,
 
         ## Enable or disable the always-on tracing feature.
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $EnableTracing, #/EnableTracing={true | false}
+        [System.Boolean] $EnableTracing,
 
         ## Anonymous statistics and usage information are sent to Citrix to help Citrix improve the quality and performance of its products
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $EnableCEIP, #/EnableCEIP={true | false}
+        [System.Boolean] $EnableCEIP,
 
         ## Specifies whether users can add and remove stores
         [Parameter()]
         [ValidateSet('Any','SecureOnly','Never')]
-        [System.String] $AllowAddStore, #ALLOWADDSTORE={N | S | A}
+        [System.String] $AllowAddStore,
 
         ## Specifies whether users can add and remove stores
         [Parameter()]
         [ValidateSet('Any','SecureOnly','Never')]
         [Alias('AllowSavePwd')]
-        [System.String] $AllowSavePassword, #ALLOWSAVEPWD={N | S | A}
+        [System.String] $AllowSavePassword,
 
         ## Specifies up to 10 stores to use with Citrix Receiver
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String[]] $Store, #STOREx="storename;http[s]://servername.domain/IISLocation/discovery;[On | Off] ; [storedescription]" [ STOREy="..."]
+        [System.String[]] $Store,
 
         ## When the administrator sets the SelfServiceMode flag to false, the user no longer has access to the self service Citrix Receiver user interface
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $EnableSelfService, #SELFSERVICEMODE={False | True}
+        [System.Boolean] $EnableSelfService,
 
         ## Enables the URL redirection feature on user devices
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $EnableUrlRedirection, # ALLOW_CLIENTHOSTEDAPPSURL=1
+        [System.Boolean] $EnableUrlRedirection,
 
         ## Enables session prelaunch
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $EnablePrelaunch, # ENABLEPRELAUNCH={False | True}
+        [System.Boolean] $EnablePrelaunch
     )
 
     # Import the module that defines custom resources
