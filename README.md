@@ -107,6 +107,8 @@ implementation of internal lab configurations.
 * vWorkgroupMember
  * Configures the TCP/IP stack and computer name
  * Requires: xComputerManagement, xNetworking and LegacyNetworking
+* vXmlNodeAttribute
+ * Configures attributes in Xml files, e.g. web.config files
 
 ### Requirements
 There are __dependencies__ on the following DSC resources:
