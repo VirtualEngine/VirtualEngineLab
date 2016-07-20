@@ -3,47 +3,114 @@ configuration vCitrixReceiver {
         ## Path to Citrix Receiver installation exe
         [Parameter(Mandatory)] [ValidateNotNull()]
         [System.String] $Path,
-        
-        ## Path to Citrix Receiver installation exe
+
+        ## Install single sign-on (pass-through) authentication
         [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $AllowUnsecureTraffic
-        
+        [System.Boolean] $IncludeSSON, #/includeSSON
+
+        ## Enable single sign-on (pass-through) authentication
+        [Parameter()] [ValidateNotNull()]
+        [System.Boolean] $EnableSSON, # ENABLE_SSON={Yes | No}
+
+        ## Enable or disable the always-on tracing feature.
+        [Parameter()] [ValidateNotNull()]
+        [System.Boolean] $EnableTracing, #/EnableTracing={true | false}
+
+        ## Anonymous statistics and usage information are sent to Citrix to help Citrix improve the quality and performance of its products
+        [Parameter()] [ValidateNotNull()]
+        [System.Boolean] $EnableCEIP, #/EnableCEIP={true | false}
+
+        ## Specifies whether users can add and remove stores
+        [Parameter()]
+        [ValidateSet('Any','SecureOnly','Never')]
+        [System.String] $AllowAddStore, #ALLOWADDSTORE={N | S | A}
+
+        ## Specifies whether users can add and remove stores
+        [Parameter()]
+        [ValidateSet('Any','SecureOnly','Never')]
+        [Alias('AllowSavePwd')]
+        [System.String] $AllowSavePassword, #ALLOWSAVEPWD={N | S | A}
+
+        ## Specifies up to 10 stores to use with Citrix Receiver
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String[]] $Store, #STOREx="storename;http[s]://servername.domain/IISLocation/discovery;[On | Off] ; [storedescription]" [ STOREy="..."]
+
+        ## When the administrator sets the SelfServiceMode flag to false, the user no longer has access to the self service Citrix Receiver user interface
+        [Parameter()] [ValidateNotNull()]
+        [System.Boolean] $EnableSelfService, #SELFSERVICEMODE={False | True}
+
+        ## Enables the URL redirection feature on user devices
+        [Parameter()] [ValidateNotNull()]
+        [System.Boolean] $EnableUrlRedirection, # ALLOW_CLIENTHOSTEDAPPSURL=1
+
+        ## Enables session prelaunch
+        [Parameter()] [ValidateNotNull()]
+        [System.Boolean] $EnablePrelaunch, # ENABLEPRELAUNCH={False | True}
     )
- 
+
     # Import the module that defines custom resources
     Import-DscResource -ModuleName xPSDesiredStateConfiguration;
+
+    $arguments = '/noreboot','/silent';
+
+    if (($PSBoundParameters.ContainsKey('IncludeSSON')) -and ($IncludeSSON -eq $true)) {
+        $arguments += '/includeSSON';
+
+        if ($PSBoundParameters.ContainsKey('EnableSSON')) {
+
+            if ($EnableSSON) {
+                $arguments += 'ENABLE_SSON=Yes';
+            }
+            else {
+                $arguments += 'ENABLE_SSON=No';
+            }
+        }
+    }
+
+    if ($PSBoundParameters.ContainsKey('EnableTracing')) {
+        $arguments += '/EnableTracing={0}' -f $EnableTracing.ToString();
+    }
+
+    if ($PSBoundParameters.ContainsKey('EnableCEIP')) {
+        $arguments += '/EnableCEIP={0}' -f $EnableCEIP.ToString();
+    }
+
+    if ($PSBoundParameters.ContainsKey('AllowAddStore')) {
+        $arguments += 'ALLOWADDSTORE={0}' -f $AllowAddStore.SubString(0,1);
+    }
+
+    if ($PSBoundParameters.ContainsKey('AllowSavePassword')) {
+        $arguments += 'ALLOWSAVEPWD={0}' -f $AllowSavePassword.SubString(0,1);
+    }
+
+    if ($PSBoundParameters.ContainsKey('Store')) {
+        for ($i = 0; $i -lt $Store.Count; $i++) {
+            $arguments += 'STORE{0}="{1}"' -f $i, $Store[$i];
+        }
+    }
+
+    if ($PSBoundParameters.ContainsKey('EnableSelfService')) {
+        $arguments += 'SELFSERVICEMODE={0}' -f $EnableSelfService.SubString(0,1);
+    }
+
+    if ($PSBoundParameters.ContainsKey('EnableUrlRedirection')) {
+        $arguments += 'ALLOW_CLIENTHOSTEDAPPSURL={0}' -f ($EnableUrlRedirection -as [System.Int32]);
+    }
+
+    if ($PSBoundParameters.ContainsKey('EnablePrelaunch')) {
+        $arguments += 'ENABLEPRELAUNCH=' -f $EnablePrelaunch.ToString();
+    }
 
     xPackage 'CitrixReceiver' {
         Name = 'Citrix Receiver';
         ProductId = '';
         Path = $Path;
-        Arguments = '/noreboot /silent';
+        Arguments = [System.String]::Join(' ', $arguments);
         ReturnCode = 0;
         InstalledCheckRegKey = 'Software\Citrix\Install\ICA Client';
         InstalledCheckRegValueName = 'InstallFolder';
         InstalledCheckRegValueData = 'C:\Program Files (x86)\Citrix\ICA Client\';
-    }
-    
-    if ($AllowUnsecureTraffic) {
-        
-        Registry 'AllowSavePwd' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Citrix\Dazzle'
-            ValueName = 'AllowAddStore';
-            ValueData = 'A';
-            ValueType = 'String';
-            Ensure = 'Present';
-            DependsOn = '[xPackage]CitrixReceiver';
-        }
-        
-        Registry 'ConnectionSecurityMode' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Citrix\AuthManager';
-            ValueName = $valueName;
-            ValueData = 'Any';
-            ValueType = 'String';
-            Ensure = 'Present';
-            DependsOn = '[xPackage]CitrixReceiver';
-        }
-        
     }
 
 } #end configuration vCitrixReceiver
