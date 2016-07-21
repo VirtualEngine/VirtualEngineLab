@@ -21,6 +21,9 @@ configuration vBuildNumber {
             else { return $false; }
         }
         SetScript = {
+            if (-not (Test-Path -Path 'HKLM:\Software\Virtual Engine\')) {
+                [ref] $null = New-Item -Path 'HKLM:\SOFTWARE\' -Name 'Virtual Engine' -ItemType Container;
+            }
             Set-ItemProperty -Path 'HKLM:\SOFTWARE\Virtual Engine' -Name 'DeploymentDate' -Value (Get-Date).ToString('dd/MM/yyyy HH:mm:ss.ff');
         }
     } #end script DeploymentDate
@@ -40,4 +43,5 @@ configuration vBuildNumber {
         ValueType = 'String';
         Ensure = 'Present';
     }
+
 } #end configuration vBuildNumber
