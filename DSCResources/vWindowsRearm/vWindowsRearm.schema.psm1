@@ -92,18 +92,80 @@ function Test-RegistryValue {
 
 }
 
+function Get-Win7RACount {
+    [CmdletBinding()] param ()
+
+    Begin{}
+
+    process {
+
+        ## I can find the rearm count using /dlv
+        $result = cscript.exe //nologo c:\windows\system32\slmgr.vbs /dlv
+
+        ## Find the rearm count by finding the last 2 characters
+        $a = ($result | Select-String 'rearm').ToString()
+        $rearmcount = $a.Substring($a.Length - 1, 1)
+
+        Return $rearmcount
+    }
+
+    End{}
+}
+
+function Test-EvalEdition {
+    [CmdletBinding()] param ()
+
+    Begin{}
+
+    process {
+
+
+        $result = cscript.exe //nologo c:\windows\system32\slmgr.vbs /dlv
+
+        ## Return True or False
+        Return [bool] ($result -match 'TIMEBASED_EVAL')
+    }
+
+    End{}
+}
+
+
+
 ## Clear contents of log file first if it exists
 ##If (test-path $LogFilePath) {Clear-Content -Path $LogFilePath}
 
 $Date = Get-Date -Format g
 $osVersion = Get-WindowsVersion
 
+## Ensure we're using an Windows Eval otherwise exit script - VL editions screw up if rearming
+if ((Test-EvalEdition) -eq $false) {
+    Write-DebugLog("$Date - Windows Evaluation Edition not found. Exiting.");
+    #return;
+}
+
 ## Use WMI to grab all the SoftwareLicensingProduct information
 $SLObj = Get-WmiObject SoftwareLicensingProduct -Filter "Description LIKE '%TIMEBASED_EVAL%'" -ErrorAction SilentlyContinue
 
-if (-not $SLObj.RemainingAppReArmCount) {
-    Write-DebugLog("$Date - No rearm property found (possibly VL edition). Exiting.");
-    return;
+## Rearm Count for Win8.1/10/2012
+$rearmcount = $SLObj.RemainingAppReArmCount
+
+
+if ($osVersion -match 'Windows 7') {
+
+    ## We need to activated Windows 7 first and after every rearm
+    ## LicenseStatus = 1 (Licensed), = 0 (Unlicensed)
+    if ($SLObj.LicenseStatus -ne 1) {
+
+        Write-DebugLog("$Date - Windows Unlicensed so activating now.")
+        $result = cscript.exe //nologo c:\windows\system32\slmgr.vbs /ato
+        Write-DebugLog("$Date - $result")
+
+    }
+
+    ## Can't find the remaining rearm count from WMI on Win7 so working around this
+    Write-DebugLog("$Date - Detected Windows 7 so finding rearm count a different way.")
+    $rearmcount = Get-Win7RACount
+
 }
 
 ## Grace Period is in minutes therefore divide by 1440 to get number of days
@@ -111,13 +173,13 @@ $gpDays = [math]::Round($SLObj.GracePeriodRemaining/1440)
 
 Write-DebugLog("$Date - Check for Windows License to Expire in {0} Days." -f ($gpDays - $Days))
 Write-DebugLog("$Date - Windows License Valid for {0} Days." -f $gpDays)
-Write-DebugLog("$Date - Remaining Rearm Count = {0}." -f $SLObj.RemainingAppReArmCount)
+Write-DebugLog("$Date - Remaining Rearm Count = {0}." -f $rearmcount)
 
 ## Check If Grace Period is less than 1 day and it's not Windows 10
 if (($gpDays -le $Days) -and ($osVersion -Notmatch 'Microsoft Windows 10')) {
 
     ## If Remaining ReArm Count is less that 0, we need to set this registry value to enable us to rearm again.
-    if ($SLObj.RemainingAppReArmCount -eq 0) {
+    if ($rearmcount -eq 0) {
 
         #Write-DebugLog("$Date - Remaining Rearm Count = {0}" -f $SLObj.RemainingAppReArmCount)
 
