@@ -6,14 +6,14 @@ data LocalizedData
         RoleNotFoundError              = Please ensure that the PowerShell module for role '{0}' is installed.
         UserNotFoundError              = Active Directory user '{0}' ({0}@{1}) was not found.
         ThumbnailPathInvalidError      = The specified thumbnail path '{0}' is not valid.
-        
+
         RetrievingADUser               = Retrieving Active Directory user '{0}' ({0}@{1}) ...
         ADUserIsPresent                = Active Directory user '{0}' ({0}@{1}) is present.
         ADUserNotPresent               = Active Directory user '{0}' ({0}@{1}) was NOT present.
         ADUserNotDesiredPropertyState  = User '{0}' property is NOT in the desired state. Expected '{1}', actual '{2}'.
         ADUserInDesiredState           = Active Directory user '{0}' ({0}@{1}) is in the desired state.
         ADUserNotInDesiredState        = Active Directory user '{0}' ({0}@{1}) is NOT in the desired state.
-        
+
         SettingADUserProperty         = Setting user property '{0}' with/to '{1}'.
         ClearingADUserProperty        = Clearing user property '{0}'.
         LoadingThumbnailFromFile      = Loading thumbnail photo from file '{0}'.
@@ -35,11 +35,11 @@ function Get-TargetResource
         ## Only used if password is managed.
         [Parameter(Mandatory)]
         [System.String] $DomainName,
-        
+
         # SamAccountName
         [Parameter(Mandatory)]
         [System.String] $UserName,
-        
+
         # Path to user's thumbnail photo or Base64 encoded photo
         [Parameter(Mandatory)]
         [System.String] $ThumbnailPhoto,
@@ -47,16 +47,16 @@ function Get-TargetResource
         ## Ideally this should just be called 'Credential' but is here for backwards compatibility
         [Parameter()] [ValidateNotNull()]
         [System.Management.Automation.PSCredential] $DomainAdministratorCredential,
-        
+
         [Parameter()] [ValidateNotNull()]
         [System.String] $DomainController,
-        
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
-    
+
     Assert-Module -ModuleName 'ActiveDirectory';
-    
+
     try
     {
         $adCommonParameters = Get-ADCommonParameters @PSBoundParameters;
@@ -81,9 +81,9 @@ function Get-TargetResource
         UserName          = $UserName;
         DistinguishedName = $adUser.DistinguishedName; ## Read-only property
         Ensure            = if ($adUser.ThumbnailPhoto.Length -gt 0) { 'Present' } else { 'Absent' };
-        ThumbnailPhotoHash = (Get-MD5HashString -Bytes $adUser.ThumbnailPhoto); 
+        ThumbnailPhotoHash = (Get-MD5HashString -Bytes $adUser.ThumbnailPhoto);
     }
-    
+
     return $targetResource;
 } #end function Get-TargetResource
 
@@ -96,11 +96,11 @@ function Test-TargetResource
         ## Only used if password is managed.
         [Parameter(Mandatory)]
         [System.String] $DomainName,
-        
+
         # SamAccountName
         [Parameter(Mandatory)]
         [System.String] $UserName,
-        
+
         # Path to user's thumbnail photo or Base64 encoded photo
         [Parameter(Mandatory)]
         [System.String] $ThumbnailPhoto,
@@ -108,26 +108,26 @@ function Test-TargetResource
         ## Ideally this should just be called 'Credential' but is here for backwards compatibility
         [Parameter()] [ValidateNotNull()]
         [System.Management.Automation.PSCredential] $DomainAdministratorCredential,
-        
+
         [Parameter()] [ValidateNotNull()]
         [System.String] $DomainController,
-        
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
-    
+
     $targetResource = Get-TargetResource @PSBoundParameters;
     $inDesiredState = $true;
-    
+
     $thumbnailBytes = Get-ThumbnailBytes -ThumbnailPhoto $ThumbnailPhoto;
     $thumbnailPhotoHash = Get-MD5HashString -Bytes $thumbnailBytes;
-    
+
     if ($Ensure -eq 'Present')
     {
         if ($thumbnailPhotoHash -ne $targetResource.ThumbnailPhotoHash)
         {
             Write-Verbose -Message ($LocalizedData.ADUserNotDesiredPropertyState -f 'ThumbnailPhoto', $thumbnailPhotoHash, $targetResource.ThumbnailPhotoHash);
-            $inDesiredState = $false;    
+            $inDesiredState = $false;
         }
     }
     elseif ($Ensure -eq 'Absent')
@@ -135,10 +135,10 @@ function Test-TargetResource
         if ($targetResource.ThumbnailPhotoHash)
         {
             Write-Verbose -Message ($LocalizedData.ADUserNotDesiredPropertyState -f 'ThumbnailPhoto', '<empty>', $targetResource.ThumbnailPhotoHash);
-            $inDesiredState = $false;   
+            $inDesiredState = $false;
         }
     }
-    
+
     if ($inDesiredState)
     {
         Write-Verbose -Message ($LocalizedData.ADUserInDesiredState -f $UserName, $DomainName);
@@ -147,7 +147,7 @@ function Test-TargetResource
     else
     {
         Write-Verbose -Message ($LocalizedData.ADUserNotInDesiredState -f $UserName, $DomainName);
-        return $false;    
+        return $false;
     }
 
 } #end function Test-TargetResource
@@ -160,11 +160,11 @@ function Set-TargetResource
         ## Only used if password is managed.
         [Parameter(Mandatory)]
         [System.String] $DomainName,
-        
+
         # SamAccountName
         [Parameter(Mandatory)]
         [System.String] $UserName,
-        
+
         # Path to user's thumbnail photo or Base64 encoded photo
         [Parameter(Mandatory)]
         [System.String] $ThumbnailPhoto,
@@ -172,17 +172,17 @@ function Set-TargetResource
         ## Ideally this should just be called 'Credential' but is here for backwards compatibility
         [Parameter()] [ValidateNotNull()]
         [System.Management.Automation.PSCredential] $DomainAdministratorCredential,
-        
+
         [Parameter()] [ValidateNotNull()]
         [System.String] $DomainController,
-        
+
         [Parameter()] [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present'
     )
-    
+
     $targetResource = Get-TargetResource @PSBoundParameters;
     $setADUserParams = Get-ADCommonParameters @PSBoundParameters;
-    
+
     if ($Ensure -eq 'Present')
     {
         [System.Byte[]] $thumbnailPhotoBytes = Get-ThumbnailBytes -ThumbnailPhoto $ThumbnailPhoto;
@@ -195,7 +195,7 @@ function Set-TargetResource
         Write-Verbose -Message ($LocalizedData.ClearingADUserProperty -f 'ThumbnailPhoto');
         [ref] $null = Set-ADUser @setADUserParams -Clear ThumbnailPhoto;
     }
-    
+
 } #end function  Set-TargetResource
 
 # Internal function to convert Base64 or filename to byte[]
@@ -207,23 +207,23 @@ function Get-ThumbnailBytes
         [Parameter(Mandatory)]
         [System.String] $ThumbnailPhoto
     )
-    
+
     ## If $ThumbnailPhoto contains '.' or '\' then we assume that we have a file path
     if ($ThumbnailPhoto.Contains('.') -or $ThumbnailPhoto.Contains('\'))
     {
         if (-not (Test-Path -Path $ThumbnailPhoto))
         {
-            $errorMessage = ThumbnailPathInvalidError -f $ThumbnailPhoto;
+            $errorMessage = $LocalizedData.ThumbnailPathInvalidError -f $ThumbnailPhoto;
             ThrowInvalidArgumentError -ErrorId 'InvalidThumbnailPath' -ErrorMessage $errorMessage;
         }
         Write-Verbose -Message ($LocalizedData.LoadingThumbnailFromFile -f $ThumbnailPhoto);
-        return (Get-Content -Path $ThumbnailPhoto -Encoding Byte);     
+        return (Get-Content -Path $ThumbnailPhoto -Encoding Byte);
     }
     else
     {
         return [System.Convert]::FromBase64String($ThumbnailPhoto);
     }
-    
+
 } #end function Get-ThumbnailBytes
 
 # Internal function to calculate the thumbnailPhoto hash
@@ -236,14 +236,14 @@ function Get-MD5HashString
         [Parameter(Mandatory)] [AllowNull()]
         [System.Byte[]] $Bytes
     )
-    
+
     if ($null -ne $Bytes)
     {
         $md5 = [System.Security.Cryptography.MD5]::Create();
         $hashBytes = $md5.ComputeHash($Bytes);
         return ([System.BitConverter]::ToString($hashBytes).Replace('-',''));
     }
-    
+
 } #end function Get-MDHashString
 
 # Internal function to build common parameters for the Active Directory cmdlets
@@ -276,7 +276,7 @@ function Get-ADCommonParameters
         [System.Management.Automation.SwitchParameter]
         $UseNameParameter
     )
-    
+
     ## The Get-ADUser, Set-ADUser and Remove-ADUser cmdlets take an -Identity parameter, but the New-ADUser cmdlet uses the -Name parameter
     if ($UseNameParameter)
     {
@@ -321,7 +321,7 @@ function Assert-Module
         $errorMessage = $LocalizedData.RoleNotFoundError -f $moduleName;
         ThrowInvalidOperationError -ErrorId $errorId -ErrorMessage $errorMessage;
     }
-    
+
 } #end function Assert-Module
 
 function ThrowInvalidOperationError

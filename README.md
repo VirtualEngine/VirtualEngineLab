@@ -92,6 +92,9 @@ implementation of internal lab configurations.
 * vSQLExpress
  * Enables NetFX 3.5 and installs SQL Express 2012/2014
  * Requires: xNetworking
+* vVisualStudioCode
+ * Installs Microsoft Visual Studio Code
+ * Requires: xPSDesiredStateConfiguration
 * vWebServer
  * Installs standard IIS web server roles/features
 * vWebServerHttps
