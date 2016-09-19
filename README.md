@@ -51,6 +51,9 @@ implementation of internal lab configurations.
 * vFirefox
  * Installs Mozilla Firefox and disables updates
  * Requires: xPSDesiredStateConfiguration
+* vGitForWindows
+ * Installs Git For Windows
+ * Requires: xPSDesiredStateConfiguration
 * vICMP
  * Permits inbound ICMP traffic through the Windows firewall
  * Requires: xNetworking
