@@ -39,7 +39,7 @@ PerformanceTweaksFSCache=Enabled
 '@
 
     File 'GitForWindowsInf' {
-        Contents        = $vsCodeInf;
+        Contents        = $gitForWindowsInf;
         DestinationPath = $gitForWindowsInfPath;
         Force           = $true;
         Ensure          = 'Present';
