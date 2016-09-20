@@ -53,7 +53,7 @@ PerformanceTweaksFSCache=Enabled
         Ensure          = 'Present';
     }
 
-    $dependsOn = @('[File]GitForWindowsInf');
+    $gitForWindowsDependsOn = @('[File]GitForWindowsInf');
 
     if ($PSBoundParameters.ContainsKey('GitForWindowsIconPath')) {
 
@@ -65,7 +65,7 @@ PerformanceTweaksFSCache=Enabled
             Ensure          = 'Present';
         }
 
-        $dependsOn += '[File]GitForWindowsIcon';
+        $gitForWindowsDependsOn += '[File]GitForWindowsIcon';
     }
 
     $arguments = '/SP-','/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART',"/LOADINF=$gitForWindowsInfPath";
@@ -81,7 +81,7 @@ PerformanceTweaksFSCache=Enabled
             InstalledCheckRegValueName = 'URLInfoAbout';
             InstalledCheckRegValueData = 'https://git-for-windows.github.io/';
             RunAsCredential            = $Credential;
-            DependsOn                  = $dependsOn;
+            DependsOn                  = $gitForWindowsDependsOn;
         }
 
     }
@@ -95,7 +95,7 @@ PerformanceTweaksFSCache=Enabled
             InstalledCheckRegKey       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1';
             InstalledCheckRegValueName = 'URLInfoAbout';
             InstalledCheckRegValueData = 'https://git-for-windows.github.io/';
-            DependsOn                  = $dependsOn;
+            DependsOn                  = $gitForWindowsDependsOn;
         }
     }
 

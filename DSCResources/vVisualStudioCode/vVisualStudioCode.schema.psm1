@@ -71,21 +71,21 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
 
     if ($RemoveFileTypeAssociation) {
 
-        Registry 'VSCodeFileTypeAssociation' {
+        Registry 'VSCodeFileTypeAssociationPs1' {
             Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.ps1\OpenWithProgids';
             ValueName = 'VSCode.ps1';
             Ensure = 'Absent';
             DependsOn = '[xPackage]VSCode';
         }
 
-        Registry 'VSCodeFileTypeAssociation' {
+        Registry 'VSCodeFileTypeAssociationPsd1' {
             Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psd1\OpenWithProgids';
             ValueName = 'VSCode.psd1';
             Ensure = 'Absent';
             DependsOn = '[xPackage]VSCode';
         }
 
-        Registry 'VSCodeFileTypeAssociation' {
+        Registry 'VSCodeFileTypeAssociationPsm1' {
             Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psm1\OpenWithProgids';
             ValueName = 'VSCode.psm1';
             Ensure = 'Absent';
