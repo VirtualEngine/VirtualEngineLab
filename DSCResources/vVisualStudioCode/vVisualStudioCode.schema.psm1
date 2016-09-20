@@ -5,11 +5,13 @@ configuration vVisualStudioCode {
         [ValidateNotNull()]
         [System.String] $Path,
 
+        ## Credential used to install VS Code
         [Parameter()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()]
         $Credential,
 
+        ## Remove the VS Code file type associations
         [Parameter()]
         [System.Boolean] $RemoveFileTypeAssociation
     )
@@ -72,6 +74,20 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
         Registry 'VSCodeFileTypeAssociation' {
             Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.ps1\OpenWithProgids';
             ValueName = 'VSCode.ps1';
+            Ensure = 'Absent';
+            DependsOn = '[xPackage]VSCode';
+        }
+
+        Registry 'VSCodeFileTypeAssociation' {
+            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psd1\OpenWithProgids';
+            ValueName = 'VSCode.psd1';
+            Ensure = 'Absent';
+            DependsOn = '[xPackage]VSCode';
+        }
+
+        Registry 'VSCodeFileTypeAssociation' {
+            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psm1\OpenWithProgids';
+            ValueName = 'VSCode.psm1';
             Ensure = 'Absent';
             DependsOn = '[xPackage]VSCode';
         }

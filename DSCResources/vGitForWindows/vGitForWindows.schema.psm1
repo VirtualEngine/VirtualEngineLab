@@ -5,18 +5,25 @@ configuration vGitForWindows {
         [ValidateNotNull()]
         [System.String] $Path,
 
-
+        ## MSI product name
         [Parameter(Mandatory)]
         [System.String] $ProductName,
 
+        ## Credential used to install Git for Windows
         [Parameter()]
         [System.Management.Automation.PSCredential]
         [System.Management.Automation.CredentialAttribute()]
         $Credential,
 
+        ## Remove the specified icons
         [Parameter()]
         [ValidateSet('GitBash','GitCmd','GitGui')]
-        [System.String[]] $RemoveGitForWindowsIcon
+        [System.String[]] $RemoveGitForWindowsIcon,
+
+        ## Path to Git for Windows icon file
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $GitForWindowsIconPath
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration, xPSDesiredStateConfiguration;
@@ -42,7 +49,23 @@ PerformanceTweaksFSCache=Enabled
         Contents        = $gitForWindowsInf;
         DestinationPath = $gitForWindowsInfPath;
         Force           = $true;
+        Type            = 'File';
         Ensure          = 'Present';
+    }
+
+    $dependsOn = @('[File]GitForWindowsInf');
+
+    if ($PSBoundParameters.ContainsKey('GitForWindowsIconPath')) {
+
+        File 'GitForWindowsIcon' {
+            SourcePath      = $GitForWindowsIconPath;
+            DestinationPath = 'C:\Program Files\Git\mingw64\share\git\git-for-windows.ico';
+            Type            = 'File';
+            Force           = $true;
+            Ensure          = 'Present';
+        }
+
+        $dependsOn += '[File]GitForWindowsIcon';
     }
 
     $arguments = '/SP-','/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART',"/LOADINF=$gitForWindowsInfPath";
@@ -58,7 +81,7 @@ PerformanceTweaksFSCache=Enabled
             InstalledCheckRegValueName = 'URLInfoAbout';
             InstalledCheckRegValueData = 'https://git-for-windows.github.io/';
             RunAsCredential            = $Credential;
-            DependsOn                  = '[File]GitForWindowsInf';
+            DependsOn                  = $dependsOn;
         }
 
     }
@@ -72,7 +95,7 @@ PerformanceTweaksFSCache=Enabled
             InstalledCheckRegKey       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1';
             InstalledCheckRegValueName = 'URLInfoAbout';
             InstalledCheckRegValueData = 'https://git-for-windows.github.io/';
-            DependsOn                  = '[File]GitForWindowsInf';
+            DependsOn                  = $dependsOn;
         }
     }
 
@@ -93,9 +116,10 @@ PerformanceTweaksFSCache=Enabled
 
         File "$($icon)Icon" {
             DestinationPath = $gitForWindowsIconPath;
-            Type = 'File';
-            Force = $true;
-            Ensure = 'Absent';
+            Type            = 'File';
+            Force           = $true;
+            Ensure          = 'Absent';
+            DependsOn       = '[xPackage]GitForWindows';
         }
 
     } #end foreach icon
