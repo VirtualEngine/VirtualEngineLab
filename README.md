@@ -77,6 +77,9 @@ implementation of internal lab configurations.
 * vPowerPointViewer
  * Installs Microsoft PowerPoint Viewer
  * Requires: xPSDesiredStateConfiguration
+* vPuTTY
+ * Installs PuTTY
+ * Requires: xPSDesiredStateConfiguration
 * vRemoteAssistance
  * Installs the Remote Assistance feature and permits inbound RDP shadow requests
  * Requires: -EnableFirewallException requires xNetworking resource
