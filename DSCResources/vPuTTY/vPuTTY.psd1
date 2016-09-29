@@ -5,5 +5,5 @@
     Author = 'Iain Brighton';
     CompanyName = 'Virtual Engine';
     Copyright = '(c) 2016 Virtual Engine Limited. All rights reserved.';
-    Description = 'Virtual Engine PowerPoint Viewer DSC composite resource.';
+    Description = 'Virtual Engine PuTTY DSC composite resource.';
 }

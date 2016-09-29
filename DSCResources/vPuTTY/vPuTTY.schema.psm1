@@ -4,6 +4,7 @@ configuration vPuTTY {
         [Parameter(Mandatory)]
         [System.String] $Path,
 
+        ## MSI product name
         [Parameter(Mandatory)]
         [System.String] $ProductName,
 
