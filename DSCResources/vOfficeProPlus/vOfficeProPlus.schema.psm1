@@ -3,20 +3,20 @@ configuration vOfficeProPlus {
         ## Path to Office setup.exe
         [Parameter(Mandatory)] [ValidateNotNull()]
         [System.String] $Path,
-        
+
         [Parameter(Mandatory)] [ValidateSet('2010','2013','2016')]
         [System.String] $Version,
-        
+
         [Parameter()] [ValidateNotNullOrEmpty()]
         [System.String] $CompanyName = 'VirtualEngine',
-        
+
         [Parameter()] [ValidateNotNullOrEmpty()]
         [System.String] $KmsServer,
-        
-        [Parameter()] 
+
+        [Parameter()]
         [System.Int32] $KmsServerPort = 1688
     )
- 
+
     # Import the module that defines custom resources
     Import-DscResource -ModuleName PSDesiredStateConfiguration;
 
@@ -34,7 +34,7 @@ configuration vOfficeProPlus {
             $productCode = '90160000-0011-0000-0000-0000000FF1CE';
         }
     }
-    
+
     $configXmlNoKms = @'
 <Configuration Product="ProPlus">
 	<Display Level="Basic" CompletionNotice="no" SuppressModal="yes" AcceptEula="yes" />
@@ -53,26 +53,31 @@ configuration vOfficeProPlus {
 '@;
 
     $tempConfigPath = Join-Path -Path "$env:SYSTEMROOT\Temp\" -ChildPath ('{0}.xml' -f $productName.Replace(' ',''));
-    
+
     if ($PSBoundParameters.ContainsKey('KmsServer')) {
-        $configXml = $configXmlKms -replace '\{KmsServer\}',$KmsServer -replace '\{KmsPort\}',$KmsServerPort -replace '\{Company\}',$Company;
+
+        $configXml = $configXmlKms -replace '\{KmsServer\}', $KmsServer -replace '\{KmsPort\}', $KmsServerPort;
     }
     else {
-        $configXml = $configXmlNoKms -replace '\{company\}',$Company;
+
+        $configXml = $configXmlNoKms;
     }
-    
+
+    $configXml = $configXml -replace '\{Company\}', $CompanyName;
+
     File 'OfficeConfigXml' {
         DestinationPath = $tempConfigPath;
         Contents = $configXml;
         Ensure = 'Present';
         Type = 'File';
     }
-            
+
     Package "Office$Version" {
         Name = $productName;
         Path = $Path;
         ProductId = $productCode;
         Arguments = '/config "{0}"' -f $tempConfigPath;
+        DependsOn = '[File]OfficeConfigXml';
     }
 
 } #end configuration vOfficeProPlus

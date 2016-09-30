@@ -4,13 +4,13 @@ configuration vPowerPointViewer {
         [Parameter(Mandatory)] [ValidateNotNull()]
         [System.String] $Path
     )
- 
+
     # Import the module that defines custom resources
     Import-DscResource -ModuleName xPSDesiredStateConfiguration;
 
     xPackage 'PowerPointViewer' {
         Name = 'Microsoft PowerPoint Viewer';
-        ProductId = '95140000-00AF-0409-0000-0000000FF1CE';
+        ProductId = '';
         Path = $Path;
         Arguments = '/quiet /norestart';
         ReturnCode = 0;
