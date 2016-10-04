@@ -17,7 +17,12 @@ configuration vWindowsUpdate {
         [System.Boolean] $UpdateNow
     )
 
-    Import-DscResource -ModuleName xWindowsUpdate;
+    Import-DscResource -ModuleName PSDesiredStateConfiguration, xWindowsUpdate;
+
+    Service 'WindowsUpdate' {
+        Name = 'WUAUServ'
+        StartupType = 'Manual';
+    }
 
     if ($UseMicrosoftUpdate) {
 
@@ -42,7 +47,7 @@ configuration vWindowsUpdate {
         Notifications    = $Notifications;
         Source           = $updateSource;
         UpdateNow        = $UpdateNow;
-        DependsOn        = '[xMicrosoftUpdate]MicrosoftUpdate'
+        DependsOn        = '[Service]WindowsUpdate','[xMicrosoftUpdate]MicrosoftUpdate'
     }
 
 } #end configuration vWindowsUpdate
