@@ -3,28 +3,34 @@ configuration vScheduledTask {
         ## Scheduled task name
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $TaskName,
-        
+
         ## Task scheduler folder/path
         [Parameter(Mandatory)] [ValidateNotNullOrEmpty()]
         [System.String] $TaskPath,
-        
-        ## Target scheduled task state 
+
+        ## Target scheduled task state
         [Parameter(Mandatory)] [ValidateSet('Enabled','Disabled')]
         [System.String] $State
     )
-    
+
     ## Requires Server 2012/Windows 8 or later
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration;
-    
+
     $scriptResourceId = $TaskName.Replace(' ','');
     Script $scriptResourceId {
-        
+
         GetScript = {
-            $task = Get-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath;
-            return @{ Target = $task.State; }
+            $task = Get-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath -ErrorAction SilentlyContinue;
+            if ($null -eq $task) {
+                ## No task so just return the requested state so Test-TargetResource passes
+                return @{ Target = $using:State; }
+            }
+            else {
+                return @{ Target = $task.State; }
+            }
         }
-        
+
         TestScript = {
             $task = Get-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath;
             if ($using:State -eq 'Enabled') {
@@ -35,7 +41,7 @@ configuration vScheduledTask {
                 return ($task.State -eq $using:State);
             }
         }
-        
+
         SetScript = {
             if ($using:State -eq 'Enabled') {
                 [ref] $null = Enable-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath;
@@ -44,7 +50,7 @@ configuration vScheduledTask {
                 [ref] $null = Disable-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath;
             }
         }
-    
+
     } #end script
-    
+
 } #end configuration vScheduledTask
