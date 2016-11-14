@@ -13,7 +13,13 @@ configuration vVisualStudioCode {
 
         ## Remove the VS Code file type associations
         [Parameter()]
-        [System.Boolean] $RemoveFileTypeAssociation
+        [System.Boolean] $RemoveFileTypeAssociation,
+
+        ## Registers an Active Setup PowerShell script that is run per user, e.g.
+        ## to disable automatic updates.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $ActiveSetupScriptPath
     )
 
     # Import the module that defines custom resources
@@ -72,24 +78,54 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
     if ($RemoveFileTypeAssociation) {
 
         Registry 'VSCodeFileTypeAssociationPs1' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.ps1\OpenWithProgids';
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.ps1\OpenWithProgids';
             ValueName = 'VSCode.ps1';
-            Ensure = 'Absent';
+            Ensure    = 'Absent';
             DependsOn = '[xPackage]VSCode';
         }
 
         Registry 'VSCodeFileTypeAssociationPsd1' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psd1\OpenWithProgids';
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psd1\OpenWithProgids';
             ValueName = 'VSCode.psd1';
-            Ensure = 'Absent';
+            Ensure    = 'Absent';
             DependsOn = '[xPackage]VSCode';
         }
 
         Registry 'VSCodeFileTypeAssociationPsm1' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psm1\OpenWithProgids';
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.psm1\OpenWithProgids';
             ValueName = 'VSCode.psm1';
-            Ensure = 'Absent';
+            Ensure    = 'Absent';
             DependsOn = '[xPackage]VSCode';
+        }
+    }
+
+    if ($PSBoundParameters.ContainsKey('ActiveSetupScriptPath')) {
+
+        Registry 'VSCodeActiveSetup' {
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\VE_VSCode';
+            ValueType = 'String';
+            ValueName = '(Default)';
+            ValueData = 'Visual Studio Code';
+            Ensure    = 'Present';
+            DependsOn = '[vVisualStudioCode]VSCode';
+        }
+
+        Registry 'VSCodeAutoUpdate' {
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\VE_VSCode';
+            ValueType = 'String';
+            ValueName = 'StubPath';
+            ValueData = 'powershell.exe -ExecutionPolicy RemoteSigned -NoLogo -WindowStyle Hidden -File {0}' -f $ActiveSetupScriptPath.Replace('\','\\');
+            Ensure    = 'Present';
+            DependsOn = '[vVisualStudioCode]VSCode';
+        }
+
+        Registry 'VSCodeAutoUpdateVersion' {
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\VE_VSCode';
+            ValueType = 'String';
+            ValueName = 'Version';
+            ValueData = '1,0';
+            Ensure    = 'Present';
+            DependsOn = '[vVisualStudioCode]VSCode';
         }
     }
 
