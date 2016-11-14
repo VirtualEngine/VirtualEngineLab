@@ -125,7 +125,7 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
             ValueName = 'Version';
             ValueData = '1,0';
             Ensure    = 'Present';
-            DDependsOn = '[xPackage]VSCode';
+            DependsOn = '[xPackage]VSCode';
         }
     }
 
