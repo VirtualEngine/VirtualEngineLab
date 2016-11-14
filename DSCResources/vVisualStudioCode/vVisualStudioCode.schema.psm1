@@ -107,7 +107,7 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
             ValueName = '(Default)';
             ValueData = 'Visual Studio Code';
             Ensure    = 'Present';
-            DependsOn = '[vVisualStudioCode]VSCode';
+            DependsOn = '[xPackage]VSCode';
         }
 
         Registry 'VSCodeAutoUpdate' {
@@ -116,7 +116,7 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
             ValueName = 'StubPath';
             ValueData = 'powershell.exe -ExecutionPolicy RemoteSigned -NoLogo -WindowStyle Hidden -File {0}' -f $ActiveSetupScriptPath.Replace('\','\\');
             Ensure    = 'Present';
-            DependsOn = '[vVisualStudioCode]VSCode';
+            DependsOn = '[xPackage]VSCode';
         }
 
         Registry 'VSCodeAutoUpdateVersion' {
@@ -125,7 +125,7 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
             ValueName = 'Version';
             ValueData = '1,0';
             Ensure    = 'Present';
-            DependsOn = '[vVisualStudioCode]VSCode';
+            DDependsOn = '[xPackage]VSCode';
         }
     }
 
