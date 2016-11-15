@@ -1,10 +1,12 @@
 configuration vRemoteDesktopAdmin {
     param (
-        [Parameter()] [ValidateSet('Present','Absent')]
+        [Parameter()]
+        [ValidateSet('Present','Absent')]
         [System.String] $Ensure = 'Present',
 
         ## Configuration Network Level Authentication
-        [Parameter()] [ValidateSet('Secure','NonSecure')]
+        [Parameter()]
+        [ValidateSet('Secure','NonSecure')]
         [System.String] $UserAuthentication = 'Secure',
 
         ## Not supported on Windows 7 (use LegacyNetworking module)
@@ -12,11 +14,13 @@ configuration vRemoteDesktopAdmin {
         [System.Boolean] $EnableFirewallException = $true,
 
         ## Members to include in the 'Remote Desktop Users; group
-        [Parameter()] [ValidateNotNullOrEmpty()]
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String[]] $MembersToInclude,
 
         ## Domain credentials to enumerate domain groups
-        [Parameter()] [ValidateNotNull()]
+        [Parameter()]
+        [ValidateNotNull()]
         [System.Management.Automation.PSCredential] $Credential
     )
 
@@ -27,6 +31,7 @@ configuration vRemoteDesktopAdmin {
     if ($PSBoundParameters.ContainsKey('MembersToInclude')) {
 
         if ($PSBoundParameters.ContainsKey('Credential')) {
+
             xGroup 'RemoteDesktopUsers' {
                 GroupName        = 'Remote Desktop Users';
                 MembersToInclude = $MembersToInclude;
@@ -35,6 +40,7 @@ configuration vRemoteDesktopAdmin {
             }
         }
         else {
+
             xGroup 'RemoteDesktopUsers' {
                 GroupName        = 'Remote Desktop Users';
                 MembersToInclude = $MembersToInclude;
@@ -49,6 +55,7 @@ configuration vRemoteDesktopAdmin {
     }
 
     if ($EnableFirewallException -eq $true) {
+
         xFirewall 'RemoteDesktopUserModeInTCP' {
             Name        = 'RemoteDesktop-UserMode-In-TCP';
             DisplayName = 'Remote Desktop - User Mode (TCP-In)';

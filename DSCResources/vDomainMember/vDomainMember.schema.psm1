@@ -2,38 +2,47 @@ configuration vDomainMember {
     param (
         [Parameter(Mandatory)]
         [System.String] $ComputerName,
-        
-        [Parameter(Mandatory)] [AllowNull()]
+
+        [Parameter(Mandatory)]
+        [AllowNull()]
         [System.String] $DomainName,
-        
+
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential] $Credential,
-        
-        [Parameter()] [ValidateNotNullOrEmpty()]
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $InterfaceAlias = 'Ethernet',
-        
-        [Parameter(ParameterSetName = 'Static')] [ValidateNotNullOrEmpty()]
+
+        [Parameter(ParameterSetName = 'Static')]
+        [ValidateNotNullOrEmpty()]
         [System.String] $IPAddress,
-        
-        [Parameter(ParameterSetName = 'Static')] [ValidateNotNull()]
-        [System.Int32] $SubnetMask = 24,
-        
-        [Parameter()] [ValidateNotNullOrEmpty()]
+
+        [Parameter(ParameterSetName = 'Static')]
+        [ValidateNotNull()]
+        [Alias('SubnetMask')] ## xNetworking v3.0.0.0 compatibility
+        [System.Int32] $PrefixLength = 24,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DefaultGateway,
-        
-        [Parameter()] [ValidateSet('IPv4','IPv6')]
+
+        [Parameter()]
+        [ValidateSet('IPv4','IPv6')]
         [System.String] $AddressFamily = 'IPv4',
-        
-        [Parameter()] [ValidateNotNullOrEmpty()]
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [System.String] $DnsServer,
-        
-        [Parameter()] [AllowNull()]
+
+        [Parameter()]
+        [AllowNull()]
         [System.String] $TargetOU,
-        
+
         ## Domain join retry interval
         [Parameter()]
         [System.Int32] $RetryIntervalSec = 60,
-        
+
         ## Domain join retry count
         [Parameter()]
         [System.Int32] $RetryCount = 60
@@ -44,11 +53,12 @@ configuration vDomainMember {
 
     $resourceDependsOn = @();
     $domainCredential = $Credential;
-    
+
     if ($InterfaceAlias -match 'Local Area Connection') {
-        
+
         ## Uses the legacy WMI calls
         if ($DnsServer) {
+
             vDNSServerAddress 'DNS' {
                 InterfaceAlias = $InterfaceAlias;
                 Address = $DnsServer;
@@ -56,35 +66,39 @@ configuration vDomainMember {
             }
             $resourceDependsOn += '[vDNSServerAddress]DNS';
         }
-        
+
         if ($IPAddress) {
+
             vIPAddress 'IP' {
                 IPAddress = $IPAddress;
-                SubnetMask = $SubnetMask;
+                SubnetMask = $PrefixLength;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
             }
             $resourceDependsOn += '[vIPAddress]IP';
         }
-        
+
         if ($DefaultGateway) {
+
             vDefaultGatewayAddress 'Gateway' {
                 Address = $DefaultGateway;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
             }
         }
-        
+
         ## Win7 requires domain join credential to be NETBIOSDOMAIN\Username
         if (-not $Credential.UserName.Contains('\')) {
+
             $domainCredentialUsername = '{0}\{1}' -f $DomainName.Split('.')[0], $Credential.Username;
             $domainCredential = New-Object PSCredential -ArgumentList $domainCredentialUsername, $Credential.Password;
         }
-        
+
     } #end InterfaceAlias like Local Area Connection
     else {
-        
+
         if ($DnsServer) {
+
             xDNSServerAddress 'DNS' {
                 InterfaceAlias = $InterfaceAlias;
                 Address = $DnsServer;
@@ -92,29 +106,31 @@ configuration vDomainMember {
             }
             $resourceDependsOn += '[xDNSServerAddress]DNS';
         }
-        
+
         if ($IPAddress) {
+
             xIPAddress 'IP' {
                 IPAddress = $IPAddress;
-                SubnetMask = $SubnetMask;
+                PrefixLength = $PrefixLength;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
             }
             $resourceDependsOn += '[xIPAddress]IP';
         }
-  
+
         if ($DefaultGateway) {
+
             xDefaultGatewayAddress 'Gateway' {
                 Address = $DefaultGateway;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
             }
         }
-        
+
     } #end InterfaceAlias like Ethernet
-    
+
     if ($resourceDependsOn.Count -ge 1) {
-        
+
         ## Add a pause to wait for IP stack to be able to communicate with AD
         xWaitForADDomain 'WaitForADDomain' {
             DomainName = $DomainName;
@@ -122,9 +138,10 @@ configuration vDomainMember {
             RetryIntervalSec = $RetryIntervalSec;
             RetryCount = $RetryCount;
             DependsOn = $resourceDependsOn;
-        } 
-        
+        }
+
         if ([System.String]::IsNullOrEmpty($TargetOU)) {
+
             xComputer 'ComputerName' {
                 Name = $ComputerName;
                 DomainName = $DomainName;
@@ -133,6 +150,7 @@ configuration vDomainMember {
             }
         }
         else {
+
             xComputer 'ComputerName' {
                 Name = $ComputerName;
                 DomainName = $DomainName;
@@ -141,19 +159,20 @@ configuration vDomainMember {
                 DependsOn = '[xWaitForADDomain]WaitForADDomain';
             }
         }
-        
+
     } #end if dependecnies
     else {
-        
+
         ## Add a pause to wait for IP stack to be able to communicate with AD
         xWaitForADDomain 'WaitForADDomain' {
             DomainName = $DomainName;
             DomainUserCredential = $domainCredential;
             RetryIntervalSec = $RetryIntervalSec;
             RetryCount = $RetryCount;
-        } 
-        
+        }
+
         if ([System.String]::IsNullOrEmpty($TargetOU)) {
+
             xComputer 'ComputerName' {
                 Name = $ComputerName;
                 DomainName = $DomainName;
@@ -162,6 +181,7 @@ configuration vDomainMember {
             }
         }
         else {
+
             xComputer 'ComputerName' {
                 Name = $ComputerName;
                 DomainName = $DomainName;
