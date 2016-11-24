@@ -4,7 +4,7 @@ configuration vPuTTY {
         [Parameter(Mandatory)]
         [System.String] $Path,
 
-        ## MSI product name
+        ## Package name used to check for product installation
         [Parameter(Mandatory)]
         [System.String] $ProductName,
 

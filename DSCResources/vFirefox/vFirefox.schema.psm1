@@ -1,14 +1,20 @@
 configuration vFirefox {
     param (
         ## Path to Firefox installation exe
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.String] $Path,
-        
+
         ## Enable favorite import on startup
         [Parameter()]
-        [System.Boolean] $EnableProfileMigration
+        [System.Boolean] $EnableProfileMigration,
+
+        ## Override the package name used to check for product installation
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $ProductName = 'Firefox'
     )
- 
+
     # Import the module that defines custom resources
     Import-DscResource -ModuleName PSDesiredStateConfiguration, xPSDesiredStateConfiguration;
 
@@ -21,16 +27,16 @@ DesktopShortcut=false
 StartMenuShortcuts=true
 MaintenanceService=false
 '@;
-    
+
     File 'FirefoxIni' {
         DestinationPath = $firefoxIniPath;
         Contents = $firefoxIni;
         Ensure = 'Present';
         Type = 'File';
     }
-    
+
     xPackage 'Firefox' {
-        Name = 'Firefox';
+        Name = $ProductName;
         ProductId = '';
         Path = $Path;
         Arguments = '/INI="{0}"' -f $firefoxIniPath;
@@ -41,7 +47,7 @@ MaintenanceService=false
         CreateCheckRegValue = $true;
         DependsOn = '[File]FirefoxIni';
     }
-    
+
     $mozillaCfg = @'
 //
 lockPref("app.update.enabled", false);
@@ -58,12 +64,12 @@ defaultPref("layers.acceleration.disabled", true);
         Type = 'File';
         DependsOn = '[xPackage]Firefox';
     }
-    
+
     $localSettingsJS = @'
 pref("general.config.obscure_value", 0); // only needed if you do not want to obscure the content with ROT-13
 pref("general.config.filename", "mozilla.cfg");
 '@
-    
+
     File 'LocalSettingsJS' {
         DestinationPath = '{0}\Mozilla Firefox\browser\defaults\preferences\local-settings.js' -f ${env:ProgramFiles(x86)};
         Contents = $localSettingsJS;
@@ -71,7 +77,7 @@ pref("general.config.filename", "mozilla.cfg");
         Type = 'File';
         DependsOn = '[xPackage]Firefox';
     }
-    
+
     if (-not $EnableProfileMigration) {
         $overrideIni = @'
 [XRE]
@@ -85,5 +91,5 @@ EnableProfileMigrator=false
             DependsOn = '[xPackage]Firefox';
         }
     } #end if Enable Profile Migration
-    
+
 } #end configuration vFirefox

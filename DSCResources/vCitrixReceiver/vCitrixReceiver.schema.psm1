@@ -1,23 +1,28 @@
 configuration vCitrixReceiver {
     param (
         ## Path to Citrix Receiver installation exe
-        [Parameter(Mandatory)] [ValidateNotNull()]
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [System.String] $Path,
 
         ## Install single sign-on (pass-through) authentication
-        [Parameter()] [ValidateNotNull()]
+        [Parameter()]
+        [ValidateNotNull()]
         [System.Boolean] $IncludeSSON,
 
         ## Enable single sign-on (pass-through) authentication
-        [Parameter()] [ValidateNotNull()]
+        [Parameter()]
+        [ValidateNotNull()]
         [System.Boolean] $EnableSSON,
 
         ## Enable or disable the always-on tracing feature.
-        [Parameter()] [ValidateNotNull()]
+        [Parameter()]
+        [ValidateNotNull()]
         [System.Boolean] $EnableTracing,
 
         ## Anonymous statistics and usage information are sent to Citrix to help Citrix improve the quality and performance of its products
-        [Parameter()] [ValidateNotNull()]
+        [Parameter()]
+        [ValidateNotNull()]
         [System.Boolean] $EnableCEIP,
 
         ## Specifies whether users can add and remove stores
@@ -37,16 +42,24 @@ configuration vCitrixReceiver {
         [System.String[]] $Store,
 
         ## When the administrator sets the SelfServiceMode flag to false, the user no longer has access to the self service Citrix Receiver user interface
-        [Parameter()] [ValidateNotNull()]
+        [Parameter()]
+        [ValidateNotNull()]
         [System.Boolean] $EnableSelfService,
 
         ## Enables the URL redirection feature on user devices
-        [Parameter()] [ValidateNotNull()]
+        [Parameter()]
+        [ValidateNotNull()]
         [System.Boolean] $EnableUrlRedirection,
 
         ## Enables session prelaunch
-        [Parameter()] [ValidateNotNull()]
-        [System.Boolean] $EnablePrelaunch
+        [Parameter()]
+        [ValidateNotNull()]
+        [System.Boolean] $EnablePrelaunch,
+
+        ## Override the package name used to check for product installation
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $ProductName = 'Citrix Receiver'
     )
 
     # Import the module that defines custom resources
@@ -103,7 +116,7 @@ configuration vCitrixReceiver {
     }
 
     xPackage 'CitrixReceiver' {
-        Name = 'Citrix Receiver';
+        Name = $ProductName;
         ProductId = '';
         Path = $Path;
         Arguments = [System.String]::Join(' ', $arguments);

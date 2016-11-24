@@ -19,7 +19,12 @@ configuration vVisualStudioCode {
         ## to disable automatic updates.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [System.String] $ActiveSetupScriptPath
+        [System.String] $ActiveSetupScriptPath,
+
+        ## Override the package name used to check for product installation
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.String] $ProductName = 'Microsoft Visual Studio Code'
     )
 
     # Import the module that defines custom resources
@@ -47,7 +52,7 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
     if ($PSBoundParameters.ContainsKey('Credential')) {
 
         xPackage 'VSCode' {
-            Name                       = 'Microsoft Visual Studio Code';
+            Name                       = $ProductName;
             ProductId                  = '';
             Path                       = $Path;
             Arguments                  = [System.String]::Join(' ', $arguments);
@@ -63,7 +68,7 @@ Tasks=desktopicon,addcontextmenufiles,addtopath
     else {
 
         xPackage 'VSCode' {
-            Name                       = 'Microsoft Visual Studio Code';
+            Name                       = $ProductName;
             ProductId                  = '';
             Path                       = $Path;
             Arguments                  = [System.String]::Join(' ', $arguments);
