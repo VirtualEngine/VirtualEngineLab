@@ -32,8 +32,12 @@ configuration vScheduledTask {
         }
 
         TestScript = {
-            $task = Get-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath;
-            if ($using:State -eq 'Enabled') {
+            $task = Get-ScheduledTask -TaskName $using:TaskName -TaskPath $using:TaskPath -ErrorAction SilentlyContinue;
+            if ($null -eq $task) {
+                ## Task does not exist
+                return $true;
+            }
+            elseif ($using:State -eq 'Enabled') {
                 ## Task could also be Ready or Queued
                 return ($task.State -ne 'Disabled');
             }
