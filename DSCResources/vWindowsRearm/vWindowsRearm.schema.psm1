@@ -140,7 +140,7 @@ $osVersion = Get-WindowsVersion
 ## Ensure we're using an Windows Eval otherwise exit script - VL editions screw up if rearming
 if ((Test-EvalEdition) -eq $false) {
     Write-DebugLog("$Date - Windows Evaluation Edition not found. Exiting.");
-    #return;
+    return;
 }
 
 ## Use WMI to grab all the SoftwareLicensingProduct information
