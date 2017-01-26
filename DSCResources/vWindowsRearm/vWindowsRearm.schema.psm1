@@ -6,7 +6,12 @@ configuration vWindowsRearm {
 
         ## Name of the startup scheduled task
         [Parameter()] [ValidateNotNullOrEmpty()]
-        [System.String] $TaskName = 'Virtual Engine\Windows Rearm'
+        [System.String] $TaskName = 'Virtual Engine\Windows Rearm',
+
+        ## Does not create the rearm script, only registers the script in the DestinationPath
+        ## NOTE: THE SCRIPT WILL NEED TO ALREADY EXIST!
+        [Parameter()]
+        [System.Boolean] $RegisterTaskOnly
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration;
@@ -258,12 +263,20 @@ Write-DebugLog("")
 
     } #end foreach folder
 
-    File 'WindowsRearm_ps1' {
-        DestinationPath = $resourcePath;
-        Contents        = $windowsRearmScript;
-        Type            = 'File';
-        Ensure          = 'Present';
-        DependsOn       = $resourceDependsOn;
+    ## Default to the last folder resource
+    $scriptResourceDependsOn = $resourceDependsOn[-1];
+
+    if (-not $RegisterTaskOnly) {
+
+        File 'WindowsRearm_ps1' {
+            DestinationPath = $resourcePath;
+            Contents        = $windowsRearmScript;
+            Type            = 'File';
+            Ensure          = 'Present';
+            DependsOn       = $resourceDependsOn;
+        }
+
+        $scriptResourceDependsOn = '[File]WindowsRearm_ps1';
     }
 
     Script 'WindowsRearmTask' {
@@ -300,7 +313,7 @@ Write-DebugLog("")
             & "$env:windir\System32\schtasks.exe" /Create /RU SYSTEM /SC ONSTART /RL HIGHEST /F /TN "$using:TaskName" /TR "$taskCommand";
         }
 
-        DependsOn = '[File]WindowsRearm_ps1';
+        DependsOn = $scriptResourceDependsOn;
 
     } #end script WindowsRearmTask
 
