@@ -9,7 +9,7 @@ configuration vExchange2013Prerequisites {
 
     foreach ($feature in @(
         'AS-HTTP-Activation',
-        'Desktop-Experience',
+        'Server-Media-Foundation',
         'NET-Framework-45-Features',
         'RPC-over-HTTP-proxy',
         'RSAT-ADDS',
