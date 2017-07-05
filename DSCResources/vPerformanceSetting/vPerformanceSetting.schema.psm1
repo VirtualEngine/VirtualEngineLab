@@ -27,12 +27,12 @@ configuration vPerformanceSetting {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -ModuleName xWindowsRestore, StackExchangeResources, PSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xWindowsRestore, xComputerManangement, PSDesiredStateConfiguration;
 
     if ($PSBoundParameters.ContainsKey('PowerPlan')) {
-        PowerPlan 'PowerPlan' {
-            Name = $PowerPlan;
-            Ensure = 'Present';
+        xPowerPlan 'PowerPlan' {
+            IsSingleInstance = 'Yes';
+            Name             = $PowerPlan;
         }
     }
 

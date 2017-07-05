@@ -73,7 +73,7 @@ implementation of internal lab configurations.
      * Windows Explorer Visual effects
      * Windows Explorer help tips
      * Windows Explorer logon animations
-  * Requires: xWindowsRestore, StackExchangeResources
+  * Requires: xWindowsRestore, xComputerManagement
 * vPowerPointViewer
   * Installs Microsoft PowerPoint Viewer
   * Requires: xPSDesiredStateConfiguration
@@ -126,7 +126,6 @@ implementation of internal lab configurations.
 There are __dependencies__ on the following DSC resources:
 
 * LegacyNetworking - https://github.com/VirtualEngine/LegacyNetworking
-* StackExchangeResources - https://github.com/PowerShellOrg/StackExchangeResources
 * xActiveDirectory - https://github.com/Powershell/xActiveDirectory
 * xCertificate - https://github.com/Powershell/xCertificate
 * xComputerManagement - https://github.com/Powershell/xComputerManagement
