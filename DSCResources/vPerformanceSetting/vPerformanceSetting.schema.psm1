@@ -27,7 +27,7 @@ configuration vPerformanceSetting {
     )
  
     # Import the module that defines custom resources
-    Import-DscResource -ModuleName xWindowsRestore, xComputerManangement, PSDesiredStateConfiguration;
+    Import-DscResource -ModuleName xWindowsRestore, xComputerManagement, PSDesiredStateConfiguration;
 
     if ($PSBoundParameters.ContainsKey('PowerPlan')) {
         xPowerPlan 'PowerPlan' {
