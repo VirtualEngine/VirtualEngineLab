@@ -51,6 +51,9 @@ implementation of internal lab configurations.
 * vFirefox
   * Installs Mozilla Firefox and disables updates
   * Requires: xPSDesiredStateConfiguration
+* vFSLogixHotfix
+  * Installs KB2614892 required to install FSLogix Apps on 2008 R2 or Windows 7 x64
+  * Requires: xWindowsUpdate
 * vGitForWindows
   * Installs Git For Windows
   * Requires: xPSDesiredStateConfiguration
