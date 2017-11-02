@@ -133,7 +133,7 @@ There are __dependencies__ on the following DSC resources:
 * xCertificate - https://github.com/Powershell/xCertificate
 * xComputerManagement - https://github.com/Powershell/xComputerManagement
 * xExchange - https://github.com/Powershell/xExchange
-* xNetworking - https://github.com/Powershell/xNetworking
+* xNetworking - https://github.com/Powershell/xNetworking - __v5.0.0.0 or later required__
 * xPendingReboot - https://github.com/Powershell/xPendingReboot
 * xPSDesiredStateConfiguration - https://github.com/Powershell/xPSDesiredStateConfiguration
 * xRemoteDesktopAdmin - https://github.com/Powershell/xRemoteDesktopAdmin

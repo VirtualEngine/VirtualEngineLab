@@ -18,11 +18,6 @@ configuration vDomainMember {
         [ValidateNotNullOrEmpty()]
         [System.String] $IPAddress,
 
-        [Parameter(ParameterSetName = 'Static')]
-        [ValidateNotNull()]
-        [Alias('SubnetMask')] ## xNetworking v3.0.0.0 compatibility
-        [System.Int32] $PrefixLength = 24,
-
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [System.String] $DefaultGateway,
@@ -70,8 +65,8 @@ configuration vDomainMember {
         if ($IPAddress) {
 
             vIPAddress 'IP' {
-                IPAddress = $IPAddress;
-                SubnetMask = $PrefixLength;
+                IPAddress = $IPAddress.Split('/')[0];
+                SubnetMask = $IPAddress.Split('/')[1];
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
             }
@@ -111,7 +106,6 @@ configuration vDomainMember {
 
             xIPAddress 'IP' {
                 IPAddress = $IPAddress;
-                PrefixLength = $PrefixLength;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
             }

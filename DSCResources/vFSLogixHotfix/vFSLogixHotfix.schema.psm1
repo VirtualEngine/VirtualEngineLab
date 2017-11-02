@@ -14,7 +14,6 @@ configuration vFSLogixHotfix {
         [System.String] $Ensure = 'Present'
     )
  
-    # Import the module that defines custom resources
     Import-DscResource -ModuleName xWindowsUpdate;
      
     xHotfix $Id {
