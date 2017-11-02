@@ -22,7 +22,15 @@ configuration vPerformanceSetting {
 
         ## Disable Server Manager on logon
         [Parameter()]
-        [System.Boolean] $DisableServerManager
+        [System.Boolean] $DisableServerManager,
+
+        ## Disables lock screen and lock screen background images
+        [Parameter()]
+        [System.Boolean] $DisableLockScreenBackground,
+
+        ## Disables network discovery location wizard
+        [Parameter()]
+        [System.Boolean] $DisableNetworkLocationWizard
 
     )
  
@@ -111,5 +119,31 @@ configuration vPerformanceSetting {
         } #end foreach registry setting
 
     } #end if Disable Visual Effects
+
+    if ($DisableLockScreenBackground) {
+        Registry 'NoLockScreen' {
+            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization';
+            ValueName = 'NoLockScreen';
+            ValueData = $DisableLockScreenBackground -as [System.Int32];
+            ValueType = 'Dword';
+            Ensure = 'Present';
+        }
+
+        Registry 'DisableLogonBackgroundImage' {
+            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System';
+            ValueName = 'DisableLogonBackgroundImage';
+            ValueData = $DisableLockScreenBackground -as [System.Int32];
+            ValueType = 'Dword';
+            Ensure = 'Present';
+        }
+    }
+
+    if ($DisableNetworkLocationWizard) {
+        Registry 'NewNetworkWindowOff' {
+            Key = 'HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Network\NewNetworkWindowOff';
+            ValueName = '';
+            Ensure = 'Present';
+        }
+    }
 
 } #end configuration vPerformanceSettings
