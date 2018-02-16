@@ -31,7 +31,6 @@ configuration vPerformanceSetting {
         ## Disables network discovery location wizard
         [Parameter()]
         [System.Boolean] $DisableNetworkLocationWizard
-
     )
  
     # Import the module that defines custom resources

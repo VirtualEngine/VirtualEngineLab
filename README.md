@@ -51,6 +51,9 @@ implementation of internal lab configurations.
 * vFirefox
   * Installs Mozilla Firefox and disables updates
   * Requires: xPSDesiredStateConfiguration
+* vFolder
+  * Provisions a collection of folders/shares
+  * Requires: xSmbShare, PowerShellAccessControl
 * vFSLogixHotfix
   * Installs KB2614892 required to install FSLogix Apps on 2008 R2 or Windows 7 x64
   * Requires: xWindowsUpdate
@@ -129,6 +132,7 @@ implementation of internal lab configurations.
 There are __dependencies__ on the following DSC resources:
 
 * LegacyNetworking - https://github.com/VirtualEngine/LegacyNetworking
+* PowerShellAccessControl - https://github.com/rohnedwards/PowerShellAccessControl
 * xActiveDirectory - https://github.com/Powershell/xActiveDirectory
 * xCertificate - https://github.com/Powershell/xCertificate
 * xComputerManagement - https://github.com/Powershell/xComputerManagement
@@ -137,6 +141,7 @@ There are __dependencies__ on the following DSC resources:
 * xPendingReboot - https://github.com/Powershell/xPendingReboot
 * xPSDesiredStateConfiguration - https://github.com/Powershell/xPSDesiredStateConfiguration
 * xRemoteDesktopAdmin - https://github.com/Powershell/xRemoteDesktopAdmin
+* xSmbShare - https://github.com/Powershell/xSmbShare
 * xSystemSecurity - https://github.com/Powershell/xSystemSecurity
 * xWebAdministration - https://github.com/Powershell/xWebAdministration
 * xWindowsRestore - https://github.com/Powershell/xWindowsRestore
