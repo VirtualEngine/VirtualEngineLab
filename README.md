@@ -30,6 +30,8 @@ implementation of internal lab configurations.
 * vDomainMember
   * Configures the TCP/IP stack, computer name and joins a computer to an Active Directory domain
   * Requires: xActiveDirectory, xNetworking, xComputerManagement and LegacyNetworking
+* vDotNetFramework
+  * Installs .NET Framework
 * vExchange2013
   * Installs prerequisites and prepares AD
   * Installs Exchange 2013
