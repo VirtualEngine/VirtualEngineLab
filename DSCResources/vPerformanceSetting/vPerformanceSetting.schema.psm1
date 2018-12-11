@@ -139,9 +139,10 @@ configuration vPerformanceSetting {
 
     if ($DisableNetworkLocationWizard) {
         Registry 'NewNetworkWindowOff' {
-            Key = 'HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Network\NewNetworkWindowOff';
-            ValueName = '';
-            Ensure = 'Present';
+            Key = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NetworkLocationWizard';
+            ValueName = 'HideWizard';
+            ValueData = -not $DisableNetworkLocationWizard -as [System.Int32];
+            ValueType = 'Dword';
         }
     }
 

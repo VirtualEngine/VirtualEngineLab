@@ -18,13 +18,14 @@ configuration vDotNetFramework {
         }
 
         SetScript = {
-            Start-Process -FilePath $Path -ArgumentList '/q /norestart' -Wait;
+            Start-Process -FilePath $using:Path -ArgumentList '/q /norestart' -Wait;
+            $global:DSCMachineStatus = 1;
         }
 
         TestScript = {
             Get-ChildItem 'HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\' |
                 Get-ItemPropertyValue -Name Release |
-                    ForEach-Object { $_ -ge $MinimumBuildNumber }
+                    ForEach-Object { $_ -ge $using:MinimumBuildNumber }
         }
     } #end script vDotNetFramework
 

@@ -42,7 +42,7 @@ configuration vDomainMember {
         [Parameter()]
         [System.Int32] $RetryCount = 60
     )
-
+        
     Import-DscResource -ModuleName xComputerManagement, xActiveDirectory;
     Import-DscResource -ModuleName xNetworking, LegacyNetworking;
 
@@ -133,28 +133,7 @@ configuration vDomainMember {
             RetryCount = $RetryCount;
             DependsOn = $resourceDependsOn;
         }
-
-        if ([System.String]::IsNullOrEmpty($TargetOU)) {
-
-            xComputer 'ComputerName' {
-                Name = $ComputerName;
-                DomainName = $DomainName;
-                Credential = $domainCredential;
-                DependsOn = '[xWaitForADDomain]WaitForADDomain';
-            }
-        }
-        else {
-
-            xComputer 'ComputerName' {
-                Name = $ComputerName;
-                DomainName = $DomainName;
-                JoinOU = $TargetOU;
-                Credential = $domainCredential;
-                DependsOn = '[xWaitForADDomain]WaitForADDomain';
-            }
-        }
-
-    } #end if dependecnies
+    }
     else {
 
         ## Add a pause to wait for IP stack to be able to communicate with AD
@@ -164,26 +143,26 @@ configuration vDomainMember {
             RetryIntervalSec = $RetryIntervalSec;
             RetryCount = $RetryCount;
         }
+    }
 
-        if ([System.String]::IsNullOrEmpty($TargetOU)) {
+    if ([System.String]::IsNullOrEmpty($TargetOU)) {
 
-            xComputer 'ComputerName' {
-                Name = $ComputerName;
-                DomainName = $DomainName;
-                Credential = $domainCredential;
-                DependsOn = '[xWaitForADDomain]WaitForADDomain';
-            }
+        xComputer 'ComputerName' {
+            Name = $ComputerName;
+            DomainName = $DomainName;
+            Credential = $domainCredential;
+            DependsOn = '[xWaitForADDomain]WaitForADDomain';
         }
-        else {
+    }
+    else {
 
-            xComputer 'ComputerName' {
-                Name = $ComputerName;
-                DomainName = $DomainName;
-                JoinOU = $TargetOU;
-                Credential = $domainCredential;
-                DependsOn = '[xWaitForADDomain]WaitForADDomain';
-            }
+        xComputer 'ComputerName' {
+            Name = $ComputerName;
+            DomainName = $DomainName;
+            JoinOU = $TargetOU;
+            Credential = $domainCredential;
+            DependsOn = '[xWaitForADDomain]WaitForADDomain';
         }
-    } #end if no dependencies
+    }
 
 } #end configuration vDomainMember
