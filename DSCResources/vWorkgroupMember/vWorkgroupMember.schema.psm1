@@ -24,7 +24,7 @@ configuration vWorkgroupMember {
         [System.String] $DnsServer
     )
 
-    Import-DscResource -ModuleName xComputerManagement, xNetworking, LegacyNetworking;
+    Import-DscResource -ModuleName ComputerManagementDsc, NetworkingDsc, LegacyNetworking;
 
     if ($InterfaceAlias -match 'Local Area Connection') {
 
@@ -62,7 +62,7 @@ configuration vWorkgroupMember {
 
         if ($DnsServer) {
 
-            xDNSServerAddress 'DNS' {
+            DNSServerAddress 'DNS' {
                 InterfaceAlias = $InterfaceAlias;
                 Address = $DnsServer;
                 AddressFamily = $AddressFamily;
@@ -71,7 +71,7 @@ configuration vWorkgroupMember {
 
         if ($IPAddress) {
 
-            xIPAddress 'IP' {
+            IPAddress 'IP' {
                 IPAddress = $IPAddress;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
@@ -80,7 +80,7 @@ configuration vWorkgroupMember {
 
         if ($DefaultGateway) {
 
-            xDefaultGatewayAddress 'Gateway' {
+            DefaultGatewayAddress 'Gateway' {
                 Address = $DefaultGateway;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
@@ -89,7 +89,7 @@ configuration vWorkgroupMember {
 
     } #end InterfaceAlias like Ethernet
 
-    xComputer ComputerName {
+    Computer ComputerName {
         Name = $ComputerName;
     }
 

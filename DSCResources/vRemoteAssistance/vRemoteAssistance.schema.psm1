@@ -7,7 +7,7 @@ configuration vRemoteAssistance {
         [System.Boolean] $EnableFirewallException = $true
     )
 
-    Import-DscResource -ModuleName xNetworking;
+    Import-DscResource -ModuleName NetworkingDsc;
 
     WindowsFeature 'RemoteAssistance' {
         Name = 'Remote-Assistance';
@@ -15,7 +15,7 @@ configuration vRemoteAssistance {
     }
 
     if ($EnableFirewallException -eq $true) {
-        xFirewall 'RemoteDesktopShadowInTCP' {
+        Firewall 'RemoteDesktopShadowInTCP' {
             Name = 'RemoteDesktop-Shadow-In-TCP';
             DisplayName = 'Remote Desktop - Shadow (TCP-In)';
             Action = 'Allow';

@@ -1,7 +1,4 @@
 configuration vICMP {
-<#
-    Requires xNetworking/dev (v2.5.0.0 or later):   https://github.com/PowerShell/xNetworking/dev (due to issue #34)
-#>
     param (
         [Parameter()]
         [System.Boolean] $IPv4 = $true,
@@ -10,9 +7,9 @@ configuration vICMP {
         [System.Boolean] $IPv6 = $true
     )
  
-    Import-DscResource -ModuleName xNetworking;
+    Import-DscResource -ModuleName NetworkingDsc;
 
-    xFirewall 'ICMPv4' {
+    Firewall 'ICMPv4' {
         Name = 'FPS-ICMP4-ERQ-In';
         DisplayName = 'File and Printer Sharing (Echo Request - ICMPv4-In)';
         Description = 'Echo request messages are sent as ping requests to other nodes.';
@@ -22,7 +19,7 @@ configuration vICMP {
         Enabled = $IPv4.ToString();
     }
 
-    xFirewall 'ICMPv6' {
+    Firewall 'ICMPv6' {
         Name = 'FPS-ICMP6-ERQ-In';
         DisplayName = 'File and Printer Sharing (Echo Request - ICMPv6-In)';
         Description = 'Echo request messages are sent as ping requests to other nodes.';

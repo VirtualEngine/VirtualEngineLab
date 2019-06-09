@@ -49,7 +49,7 @@ configuration vSQLExpress {
         [System.Management.Automation.PSCredential] $Credential
     )
 
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration, xNetworking;
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration, NetworkingDsc;
 
     if ($InstallNetFrameworkCore) {
         WindowsFeature NetFX35 {
@@ -102,7 +102,7 @@ configuration vSQLExpress {
         }
     }
 
-    xFirewall 'SQLFirewall' {
+    Firewall 'SQLFirewall' {
         Name = 'MSSQL-TCP-1433-In';
         Group = 'Microsoft SQL Server';
         Action = 'Allow';

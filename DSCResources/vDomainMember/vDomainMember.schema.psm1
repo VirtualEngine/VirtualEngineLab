@@ -43,8 +43,8 @@ configuration vDomainMember {
         [System.Int32] $RetryCount = 60
     )
         
-    Import-DscResource -ModuleName xComputerManagement, xActiveDirectory;
-    Import-DscResource -ModuleName xNetworking, LegacyNetworking;
+    Import-DscResource -ModuleName ComputerManagementDsc, xActiveDirectory;
+    Import-DscResource -ModuleName NetworkingDsc, LegacyNetworking;
 
     $resourceDependsOn = @();
     $domainCredential = $Credential;
@@ -94,7 +94,7 @@ configuration vDomainMember {
 
         if ($DnsServer) {
 
-            xDNSServerAddress 'DNS' {
+            DNSServerAddress 'DNS' {
                 InterfaceAlias = $InterfaceAlias;
                 Address = $DnsServer;
                 AddressFamily = $AddressFamily;
@@ -104,7 +104,7 @@ configuration vDomainMember {
 
         if ($IPAddress) {
 
-            xIPAddress 'IP' {
+            IPAddress 'IP' {
                 IPAddress = $IPAddress;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
@@ -114,7 +114,7 @@ configuration vDomainMember {
 
         if ($DefaultGateway) {
 
-            xDefaultGatewayAddress 'Gateway' {
+            DefaultGatewayAddress 'Gateway' {
                 Address = $DefaultGateway;
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
@@ -147,7 +147,7 @@ configuration vDomainMember {
 
     if ([System.String]::IsNullOrEmpty($TargetOU)) {
 
-        xComputer 'ComputerName' {
+        Computer 'ComputerName' {
             Name = $ComputerName;
             DomainName = $DomainName;
             Credential = $domainCredential;
@@ -156,7 +156,7 @@ configuration vDomainMember {
     }
     else {
 
-        xComputer 'ComputerName' {
+        Computer 'ComputerName' {
             Name = $ComputerName;
             DomainName = $DomainName;
             JoinOU = $TargetOU;

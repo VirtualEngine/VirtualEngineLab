@@ -24,9 +24,7 @@ configuration vRemoteDesktopAdmin {
         [System.Management.Automation.PSCredential] $Credential
     )
 
-    Import-DscResource -ModuleName xRemoteDesktopAdmin;
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration;
-    Import-DscResource -ModuleName xNetworking;
+    Import-DscResource -ModuleName xRemoteDesktopAdmin, xPSDesiredStateConfiguration, NetworkingDsc;
 
     if ($PSBoundParameters.ContainsKey('MembersToInclude')) {
 
@@ -56,14 +54,14 @@ configuration vRemoteDesktopAdmin {
 
     if ($EnableFirewallException -eq $true) {
 
-        xFirewall 'RemoteDesktopUserModeInTCP' {
+        Firewall 'RemoteDesktopUserModeInTCP' {
             Name        = 'RemoteDesktop-UserMode-In-TCP';
             DisplayName = 'Remote Desktop - User Mode (TCP-In)';
             Action      = 'Allow';
             Enabled     = ($Ensure -eq 'Present');
         }
 
-        xFirewall 'RemoteDesktopUserModeInUDP' {
+        Firewall 'RemoteDesktopUserModeInUDP' {
             Name        = 'RemoteDesktop-UserMode-In-UDP';
             DisplayName = 'Remote Desktop - User Mode (UDP-In)';
             Action      = 'Allow';

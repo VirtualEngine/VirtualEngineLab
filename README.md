@@ -29,7 +29,7 @@ implementation of internal lab configurations.
   * Supports Windows 7
 * vDomainMember
   * Configures the TCP/IP stack, computer name and joins a computer to an Active Directory domain
-  * Requires: xActiveDirectory, xNetworking, xComputerManagement and LegacyNetworking
+  * Requires: xActiveDirectory, NetworkingDsc, ComputerManagementDsc and LegacyNetworking
 * vDotNetFramework
   * Installs .NET Framework
 * vExchange2013
@@ -64,7 +64,7 @@ implementation of internal lab configurations.
   * Requires: xPSDesiredStateConfiguration
 * vICMP
   * Permits inbound ICMP traffic through the Windows firewall
-  * Requires: xNetworking
+  * Requires: NetworkingDsc
 * vInternetExplorerSecurity
   * Enables or disables Internet Explorer Enhanced Security Configuration
   * Requires: xSystemSecurity
@@ -81,7 +81,7 @@ implementation of internal lab configurations.
      * Windows Explorer Visual effects
      * Windows Explorer help tips
      * Windows Explorer logon animations
-  * Requires: xWindowsRestore, xComputerManagement
+  * Requires: xWindowsRestore, ComputerManagementDsc
 * vPowerPointViewer
   * Installs Microsoft PowerPoint Viewer
   * Requires: xPSDesiredStateConfiguration
@@ -90,10 +90,10 @@ implementation of internal lab configurations.
   * Requires: xPSDesiredStateConfiguration
 * vRemoteAssistance
   * Installs the Remote Assistance feature and permits inbound RDP shadow requests
-  * Requires: -EnableFirewallException requires xNetworking resource
+  * Requires: -EnableFirewallException requires NetworkingDsc resource
 * vRemoteDesktopAdmin
   * Enables RDP connections and permits inbound RDP connections
-  * Requires: xRemoteDesktopAdmin, -EnableFirewallException requires xNetworking resource
+  * Requires: xRemoteDesktopAdmin, -EnableFirewallException requires NetworkingDsc resource
 * vRemoteDesktopLicensing
   * Installs the RDS licening role and optionally, the UI components
 * vRemoteDesktopSessionHost
@@ -105,7 +105,7 @@ implementation of internal lab configurations.
   * __Requires Server 2012/Windows 8 or later.__
 * vSQLExpress
   * Enables NetFX 3.5 and installs SQL Express 2012/2014
-  * Requires: xNetworking
+  * Requires: NetworkingDsc
 * vSSMS
   * Installs SQL Server Management Studio
   * Requires: xPSDesiredStateConfiguration
@@ -126,20 +126,20 @@ implementation of internal lab configurations.
   * Requires: xWindowsUpdate
 * vWorkgroupMember
   * Configures the TCP/IP stack and computer name
-  * Requires: xComputerManagement, xNetworking and LegacyNetworking
+  * Requires: ComputerManagementDsc, NetworkingDsc and LegacyNetworking
 * vXmlNodeAttribute
   * Configures attributes in Xml files, e.g. web.config files
 
 ### Requirements
 There are __dependencies__ on the following DSC resources:
 
+* ComputerManagementDsc - https://github.com/Powershell/ComputerManagementDsc
+* NetworkingDsc - https://github.com/Powershell/NetworkingDsc
 * LegacyNetworking - https://github.com/VirtualEngine/LegacyNetworking
 * PowerShellAccessControl - https://github.com/rohnedwards/PowerShellAccessControl
 * xActiveDirectory - https://github.com/Powershell/xActiveDirectory
 * xCertificate - https://github.com/Powershell/xCertificate
-* xComputerManagement - https://github.com/Powershell/xComputerManagement
 * xExchange - https://github.com/Powershell/xExchange
-* xNetworking - https://github.com/Powershell/xNetworking - __v5.0.0.0 or later required__
 * xPendingReboot - https://github.com/Powershell/xPendingReboot
 * xPSDesiredStateConfiguration - https://github.com/Powershell/xPSDesiredStateConfiguration
 * xRemoteDesktopAdmin - https://github.com/Powershell/xRemoteDesktopAdmin
