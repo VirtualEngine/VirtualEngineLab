@@ -45,38 +45,38 @@ configuration vPerformanceSetting {
 
     if ($PSBoundParameters.ContainsKey('DisabledSystemRestoreDrive')) {
         xSystemRestore 'SystemRestore' {
-            Drive = $DisabledSystemRestoreDrive;
+            Drive  = $DisabledSystemRestoreDrive;
             Ensure = 'Absent';
         }
     }
 
     if ($PSBoundParameters.ContainsKey('DisableHelpTips')) {
         Registry 'DisableHelpSticker' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI';
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI';
             ValueName = 'DisableHelpSticker';
             ValueData = $DisableHelpTips -as [System.Int32];
             ValueType = 'Dword';
-            Ensure = 'Present';
+            Ensure    = 'Present';
         }
     }
 
     if ($PSBoundParameters.ContainsKey('DisableLogonAnimation')) {
         Registry 'EnableFirstLogonAnimation' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System';
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System';
             ValueName = 'EnableFirstLogonAnimation';
             ValueData = (-not $DisableLogonAnimation) -as [System.Int32];
             ValueType = 'Dword';
-            Ensure = 'Present';
+            Ensure    = 'Present';
         }
     }
 
     if ($PSBoundParameters.ContainsKey('DisableServerManager')) {
         Registry 'ServerManager' {
-            Key = 'HKEY_LOCAL_MACHINE\Software\Microsoft\ServerManager';
+            Key       = 'HKEY_LOCAL_MACHINE\Software\Microsoft\ServerManager';
             ValueName = 'DoNotOpenServerManagerAtLogon';
             ValueData =  $DisableServerManager -as [System.Int32];
             ValueType = 'Dword';
-            Ensure = 'Present';
+            Ensure    = 'Present';
         }
     }
 
@@ -109,11 +109,11 @@ configuration vPerformanceSetting {
         foreach ($registrySetting in $visualEffects) {
             $resourceId = ($registrySetting.Key).Split('\')[-1];
             Registry $resourceId {
-                Key = $registrySetting.Key;
+                Key       = $registrySetting.Key;
                 ValueName = $registrySetting.ValueName;
                 ValueType = $registrySetting.ValueType;
                 ValueData = $registrySetting.ValueData;
-                Ensure = 'Present';
+                Ensure    = 'Present';
             }
         } #end foreach registry setting
 
@@ -121,25 +121,25 @@ configuration vPerformanceSetting {
 
     if ($DisableLockScreenBackground) {
         Registry 'NoLockScreen' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization';
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization';
             ValueName = 'NoLockScreen';
             ValueData = $DisableLockScreenBackground -as [System.Int32];
             ValueType = 'Dword';
-            Ensure = 'Present';
+            Ensure    = 'Present';
         }
 
         Registry 'DisableLogonBackgroundImage' {
-            Key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System';
+            Key       = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System';
             ValueName = 'DisableLogonBackgroundImage';
             ValueData = $DisableLockScreenBackground -as [System.Int32];
             ValueType = 'Dword';
-            Ensure = 'Present';
+            Ensure    = 'Present';
         }
     }
 
     if ($DisableNetworkLocationWizard) {
         Registry 'NewNetworkWindowOff' {
-            Key = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NetworkLocationWizard';
+            Key       = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NetworkLocationWizard';
             ValueName = 'HideWizard';
             ValueData = -not $DisableNetworkLocationWizard -as [System.Int32];
             ValueType = 'Dword';

@@ -99,7 +99,7 @@ configuration vDomainMember {
                 Address = $DnsServer;
                 AddressFamily = $AddressFamily;
             }
-            $resourceDependsOn += '[xDNSServerAddress]DNS';
+            $resourceDependsOn += '[DNSServerAddress]DNS';
         }
 
         if ($IPAddress) {
@@ -109,7 +109,7 @@ configuration vDomainMember {
                 InterfaceAlias = $InterfaceAlias;
                 AddressFamily = $AddressFamily;
             }
-            $resourceDependsOn += '[xIPAddress]IP';
+            $resourceDependsOn += '[IPAddress]IP';
         }
 
         if ($DefaultGateway) {
