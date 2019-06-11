@@ -57,7 +57,7 @@ configuration vWebServerHttps {
             MSFT_xWebBindingInformation  { Protocol = 'HTTPS'; Port = 443; CertificateThumbprint = $PfxCertificateThumbprint; CertificateStoreName = 'My'; }
             MSFT_xWebBindingInformation  { Protocol = 'HTTP'; Port = 80; }
         )
-        DependsOn = '[WindowsFeature]Web-Server','[xPfxImport]PfxCertificate';
+        DependsOn = '[WindowsFeature]Web-Server','[PfxImport]PfxCertificate';
     }
     
 } #end configuration vWebServerHttps
