@@ -13,7 +13,7 @@ configuration vWebServerHttps {
         [System.Management.Automation.PSCredential] $PfxCertificateCredential
     )
     
-    Import-DSCResource -ModuleName xCertificate, xWebAdministration;
+    Import-DSCResource -ModuleName CertificateDsc, xWebAdministration;
 
     $features = @(
         'NET-Framework-45-ASPNET',
@@ -42,11 +42,11 @@ configuration vWebServerHttps {
         }
     } #end foreach feature
 
-    xPfxImport 'PfxCertificate' {
+    PfxImport 'PfxCertificate' {
         Thumbprint = $PfxCertificateThumbprint;
+        Path = $PfxCertificatePath;
         Location = 'LocalMachine';
         Store = 'My';
-        Path = $PfxCertificatePath;
         Credential = $PfxCertificateCredential;
     }
     

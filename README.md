@@ -116,7 +116,7 @@ implementation of internal lab configurations.
   * Installs standard IIS web server roles/features
 * vWebServerHttps
   * Installs standard IIS web server roles/features and imports PFX certificate
-  * Requires: xCertificate and xWebAdministration
+  * Requires: CertificateDsc and xWebAdministration
 * vWebServerRedirect
   * Creates a Javascript HTML redirection file
 * vWindowsRearm
@@ -133,12 +133,12 @@ implementation of internal lab configurations.
 ### Requirements
 There are __dependencies__ on the following DSC resources:
 
+* CertificateDsc - https://github.com/Powershell/CertificateDsc
 * ComputerManagementDsc - https://github.com/Powershell/ComputerManagementDsc
 * NetworkingDsc - https://github.com/Powershell/NetworkingDsc
 * LegacyNetworking - https://github.com/VirtualEngine/LegacyNetworking
 * PowerShellAccessControl - https://github.com/rohnedwards/PowerShellAccessControl
 * xActiveDirectory - https://github.com/Powershell/xActiveDirectory
-* xCertificate - https://github.com/Powershell/xCertificate
 * xExchange - https://github.com/Powershell/xExchange
 * xPendingReboot - https://github.com/Powershell/xPendingReboot
 * xPSDesiredStateConfiguration - https://github.com/Powershell/xPSDesiredStateConfiguration
